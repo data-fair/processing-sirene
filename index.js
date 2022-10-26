@@ -79,7 +79,7 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
     }
     nbDone += etabs.length
     // console.log('progress', nbDone, sireneApiRes.data.header)
-    await log.progress('transfer des établissements', nbDone, sireneApiRes.data.header.total)
+    await log.progress('transfert des établissements vers le jeu de données', nbDone, sireneApiRes.data.header.total)
     if (sireneApiRes.data.header.curseurSuivant === sireneApiRes.data.header.curseur) {
       log.info('fin du curseur')
       return false
@@ -90,7 +90,7 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
 
   while (true) {
     if (_stopped) {
-      await log.warning('interrompu proprement pendant l\'attente')
+      await log.warning('interrompu proprement pendant entre 2 lots d\'établissements')
       break
     }
     const [keepGoing] = await Promise.all([
