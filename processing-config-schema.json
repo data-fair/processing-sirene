@@ -1,7 +1,7 @@
 {
   "type": "object",
   "x-display": "tabs",
-  "required": ["datasetMode", "message"],
+  "required": ["datasetMode", "apiSireneAccessToken"],
   "allOf": [{
     "title": "Jeu de données",
     "oneOf": [{
@@ -47,7 +47,7 @@
       "apiSireneFilter": {
         "type": "string",
         "title": "Filtre à appliquer sur l'API Sirene de l'Insee",
-        "description": "Laissez vide pour récupérer tous les établissements.\n\nExemple de filtre sur une commune: \"codeCommuneEtablissement:56260\"\n\ncf https://www.sirene.fr/static-resources/doc/INSEE_Documentation-Extrait_q.pdf"
+        "description": "Laissez vide pour récupérer tous les établissements.\n\nExemple de filtre sur une commune: \"codeCommuneEtablissement:56260\""
       }
     }
   }]
