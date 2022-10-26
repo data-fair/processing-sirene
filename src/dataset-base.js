@@ -17,7 +17,8 @@ module.exports = {
         textStandard: false,
         values: false
       },
-      title: 'Numéro Siren'
+      title: 'Numéro Siren',
+      'x-group': "Identification de l'unité légale"
     },
     {
       key: 'nic',
@@ -30,14 +31,16 @@ module.exports = {
         textStandard: false,
         values: false
       },
-      title: "Numéro interne de classement de l'établissement"
+      title: "Numéro interne de classement de l'établissement",
+      'x-group': "Identification de l'établissement"
     },
     {
       key: 'siret',
       type: 'string',
       description: "Le numéro Siret est le numéro unique d'identification attribué à chaque établissement par l'Insee. Ce numéro est un simple numéro d'ordre, composé de 14 chiffres non significatifs : les neuf premiers correspondent au numéro Siren de l'entreprise dont l'établissement dépend et les cinq derniers à un numéro interne de classement (Nic).\n\nUne entreprise est constituée d'autant d'établissements qu'il y a de lieux différents où elle exerce son activité. L'établissement est fermé quand l'activité cesse dans l'établissement concerné ou lorsque l'établissement change d'adresse.\n\nhttps://www.sirene.fr/sirene/public/variable/siret",
       'x-refersTo': 'http://www.datatourisme.fr/ontology/core/1.0/#siret',
-      title: 'Numéro Siret'
+      title: 'Numéro Siret',
+      'x-group': "Identification de l'établissement"
     },
     {
       key: 'statutDiffusionEtablissement',
@@ -54,7 +57,8 @@ module.exports = {
         O: 'Établissement diffusable',
         N: 'Personne physique ayant demandé à être exclue de la diffusion'
       },
-      title: "Statut de diffusion de l'établissement"
+      title: "Statut de diffusion de l'établissement",
+      'x-group': "Informations sur l'établissement"
     },
     {
       key: 'dateCreationEtablissement',
@@ -64,7 +68,8 @@ module.exports = {
       'x-capabilities': {
         textStandard: false
       },
-      title: "Date de création de l'établissement"
+      title: "Date de création de l'établissement",
+      'x-group': "Informations sur l'établissement"
     },
     {
       key: 'trancheEffectifsEtablissement',
@@ -94,7 +99,8 @@ module.exports = {
         51: '2 000 à 4 999 salariés',
         52: '5 000 à 9 999 salariés',
         53: '10 000 salariés et plus'
-      }
+      },
+      'x-group': "Informations sur l'établissement"
     },
     {
       key: 'anneeEffectifsEtablissement',
@@ -103,7 +109,8 @@ module.exports = {
       title: "Année de validité de la tranche d'effectif salarié de l'établissement",
       'x-capabilities': {
         textStandard: false
-      }
+      },
+      'x-group': "Informations sur l'établissement"
     },
     {
       key: 'activitePrincipaleRegistreMetiersEtablissement',
@@ -112,7 +119,8 @@ module.exports = {
         textAgg: false
       },
       description: "Cette variable désigne le code de l'activité exercée par l'artisan inscrit au registre des métiers selon la Nomenclature d'Activités Française de l'Artisanat (NAFA).\n\nhttps://www.sirene.fr/sirene/public/variable/activitePrincipaleRegistreMetiersEtablissement",
-      title: "Activité exercée par l'artisan inscrit au registre des métiers"
+      title: "Activité exercée par l'artisan inscrit au registre des métiers",
+      'x-group': "Informations sur l'établissement"
     },
     {
       key: 'dateDernierTraitementEtablissement',
@@ -122,7 +130,8 @@ module.exports = {
       title: "Date du dernier traitement de l'établissement dans le répertoire Sirene",
       'x-capabilities': {
         textStandard: false
-      }
+      },
+      'x-group': "Informations sur l'établissement"
     },
     {
       key: 'etablissementSiege',
@@ -131,13 +140,8 @@ module.exports = {
       title: "Qualité de siège ou non de l'établissement",
       'x-capabilities': {
         textStandard: false
-      }
-    },
-    {
-      key: 'nombrePeriodesEtablissement',
-      type: 'integer',
-      description: "Cette variable donne le nombre de périodes [dateDebut,dateFin] de l'établissement. Chaque période correspond à l'intervalle de temps pendant lequel la totalité des variables historisées de l'établissement n'ont pas été modifiées.\n\nLes dates de ces périodes sont des dates d'effet (et non des dates de traitement).\n\nhttps://www.sirene.fr/sirene/public/variable/nombrePeriodesEtablissement",
-      title: "Nombre de périodes de l'établissement"
+      },
+      'x-group': "Informations sur l'établissement"
     },
 
     {
@@ -160,7 +164,8 @@ https://www.sirene.fr/sirene/public/variable/etatAdministratifUniteLegale`,
       'x-labels': {
         A: 'Actif',
         F: 'Fermé'
-      }
+      },
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -178,7 +183,8 @@ https://www.sirene.fr/sirene/public/variable/etatAdministratifUniteLegale`,
         O: 'unité légale faisant partie de la diffusion publique',
         N: 'personne physique ayant demandé à être exclue de la diffusion'
       },
-      title: "Statut de diffusion de l'unité légale"
+      title: "Statut de diffusion de l'unité légale",
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -202,7 +208,8 @@ https://www.sirene.fr/sirene/public/variable/unitePurgeeUniteLegale`,
       title: 'Unité légale purgée',
       'x-capabilities': {
         textStandard: false
-      }
+      },
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -222,7 +229,8 @@ https://www.sirene.fr/sirene/public/variable/dateCreationUniteLegale`,
       'x-capabilities': {
         textStandard: false
       },
-      title: "Date de création de l'unité légale"
+      title: "Date de création de l'unité légale",
+      'x-group': "Identification de l'unité légale"
     },
 
     {
@@ -240,7 +248,8 @@ Cette variable est à 1000 pour les personnes physiques.
 Lors de son dépôt de demande de création, le déclarant indique la forme juridique de l'unité légale qu'il crée, qui est ensuite traduite en code. Ce code est modifiable, à la marge, au cours de la vie de l'unité légale (pour les personnes morales) en fonction des déclarations de l'exploitant. Pour chaque unité légale, il existe à un instant donné un seul code Catégorie juridique. Il est attribué selon la nomenclature en vigueur.
       
 https://www.sirene.fr/sirene/public/variable/categorieJuridiqueUniteLegale`,
-      title: "Catégorie juridique de l'unité légale"
+      title: "Catégorie juridique de l'unité légale",
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -259,7 +268,8 @@ La dénomination peut parfois contenir la mention de la forme de la société (S
 
 https://www.sirene.fr/sirene/public/variable/denominationUniteLegale
       `,
-      title: "Dénomination de l'unité légale"
+      title: "Dénomination de l'unité légale",
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -281,7 +291,8 @@ Elle peut être non renseignée pour les personnes morales.
 
 https://www.sirene.fr/sirene/public/variable/sigleUniteLegale
       `,
-      title: "Sigle de l'unité légale"
+      title: "Sigle de l'unité légale",
+      'x-group': "Identification de l'unité légale"
     },
 
     {
@@ -304,7 +315,8 @@ https://www.sirene.fr/sirene/public/variable/sexeUniteLegale
       'x-labels': {
         M: 'Masculin',
         F: 'Féminin'
-      }
+      },
+      'x-group': "Identification de l'unité légale"
     },
 
     {
@@ -321,7 +333,8 @@ Cette variable est à null pour les personnes morales.
 
 https://www.sirene.fr/sirene/public/variable/nomUniteLegale
       `,
-      title: 'Nom de naissance de la personnes physique'
+      title: 'Nom de naissance de la personnes physique',
+      'x-group': "Identification de l'unité légale"
     },
 
     {
@@ -338,7 +351,8 @@ Cette variable est à null pour les personnes morales. Elle peut être égalemen
 
 https://www.sirene.fr/sirene/public/variable/nomUsageUniteLegale
       `,
-      title: "Nom d'usage de la personne physique"
+      title: "Nom d'usage de la personne physique",
+      'x-group': "Identification de l'unité légale"
     },
 
     {
@@ -359,7 +373,8 @@ La variable prenom1UniteLegale peut être à null pour des personnes physiques (
 
 https://www.sirene.fr/sirene/public/variable/prenom1UniteLegale
       `,
-      title: 'Premier prénom déclaré pour une personne physique'
+      title: 'Premier prénom déclaré pour une personne physique',
+      'x-group': "Identification de l'unité légale"
     },
 
     {
@@ -370,7 +385,8 @@ https://www.sirene.fr/sirene/public/variable/prenom1UniteLegale
         textStandard: false
       },
       description: 'https://www.sirene.fr/sirene/public/variable/prenom2UniteLegale',
-      title: 'Deuxième prénom déclaré pour une personne physique'
+      title: 'Deuxième prénom déclaré pour une personne physique',
+      'x-group': "Identification de l'unité légale"
     },
 
     {
@@ -381,7 +397,8 @@ https://www.sirene.fr/sirene/public/variable/prenom1UniteLegale
         textStandard: false
       },
       description: 'https://www.sirene.fr/sirene/public/variable/prenom3UniteLegale',
-      title: 'Troisième prénom déclaré pour une personne physique'
+      title: 'Troisième prénom déclaré pour une personne physique',
+      'x-group': "Identification de l'unité légale"
     },
 
     {
@@ -392,7 +409,8 @@ https://www.sirene.fr/sirene/public/variable/prenom1UniteLegale
         textStandard: false
       },
       description: 'https://www.sirene.fr/sirene/public/variable/prenom4UniteLegale',
-      title: 'Quatrième prénom déclaré pour une personne physique'
+      title: 'Quatrième prénom déclaré pour une personne physique',
+      'x-group': "Identification de l'unité légale"
     },
 
     {
@@ -408,7 +426,8 @@ Le prénom usuel est le prénom par lequel une personne choisit de se faire appe
 Il correspond généralement au prenom1UniteLegale.
 
 https://www.sirene.fr/sirene/public/variable/prenomUsuelUniteLegale`,
-      title: 'Prénom usuel de la personne physique'
+      title: 'Prénom usuel de la personne physique',
+      'x-group': "Identification de l'unité légale"
     },
 
     {
@@ -424,7 +443,8 @@ Cette variable correspond au nom qu'une personne utilise pour se désigner dans 
 Le pseudonyme est protégé, comme le nom de famille, contre l'usurpation venant d'un tiers.
 
 https://www.sirene.fr/sirene/public/variable/pseudonymeUniteLegale`,
-      title: 'Pseudonyme de la personne physique'
+      title: 'Pseudonyme de la personne physique',
+      'x-group': "Identification de l'unité légale"
     },
 
     {
@@ -444,7 +464,8 @@ Pour chaque unité légale, il existe à un instant donné un seul code « APE»
 Au moment de la déclaration de l'entreprise, il peut arriver que l'Insee ne soit pas en mesure d'attribuer le bon code APE : la modalité 00.00Z peut alors être affectée provisoirement.
 
 https://www.sirene.fr/sirene/public/variable/activitePrincipaleUniteLegale`,
-      title: "Activité principale de l'unité légale"
+      title: "Activité principale de l'unité légale",
+      'x-group': "Informations sur l'unité légale"
     },
     {
       key: 'nomenclatureActivitePrincipaleUniteLegale',
@@ -467,7 +488,8 @@ https://www.sirene.fr/sirene/public/variable/nomenclatureActivitePrincipaleEtabl
         NAFRev1: 'NAFRev1',
         NAF1993: 'NAF1993',
         NAP: 'NAP'
-      }
+      },
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -485,7 +507,8 @@ Lors de sa déclaration en préfecture, l'association reçoit automatiquement un
 Le RNA est le fichier national, géré par le ministère de l'Intérieur, qui recense l'ensemble des informations sur les associations.
 
 https://www.sirene.fr/sirene/public/variable/identifiantAssociationUniteLegale`,
-      title: 'Numéro au Répertoire National des Associations'
+      title: 'Numéro au Répertoire National des Associations',
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -509,7 +532,8 @@ https://www.sirene.fr/sirene/public/variable/economieSocialeSolidaireUniteLegale
       'x-labels': {
         O: "l'entreprise appartient au champ de l'économie sociale et solidaire",
         N: "l'entreprise n'appartient pas au champ de l'économie sociale et solidaire"
-      }
+      },
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -529,7 +553,8 @@ https://www.sirene.fr/sirene/public/variable/societeMissionUniteLegale`,
       'x-labels': {
         O: "l'entreprise appartient au champ des sociétés à mission",
         N: "l'entreprise n'appartient pas au champ des sociétés à mission"
-      }
+      },
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -550,7 +575,8 @@ https://www.sirene.fr/sirene/public/variable/caractereEmployeurUniteLegale`,
       'x-labels': {
         O: 'unité légale employeuse',
         N: 'unité légale non employeuse'
-      }
+      },
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -581,7 +607,8 @@ https://www.sirene.fr/sirene/public/variable/caractereEmployeurUniteLegale`,
         51: '2 000 à 4 999 salariés',
         52: '5 000 à 9 999 salariés',
         53: '10 000 salariés et plus'
-      }
+      },
+      'x-group': "Informations sur l'unité légale"
     },
     {
       key: 'anneeEffectifsUniteLegale',
@@ -590,7 +617,8 @@ https://www.sirene.fr/sirene/public/variable/caractereEmployeurUniteLegale`,
       title: "Année de validité de la tranche d'effectif salarié de l'unité légale",
       'x-capabilities': {
         textStandard: false
-      }
+      },
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -610,7 +638,8 @@ https://www.sirene.fr/sirene/public/variable/nicSiegeUniteLegale`,
         textStandard: false,
         values: false
       },
-      title: "Numéro interne de classement (Nic) du siège de l'unité légale"
+      title: "Numéro interne de classement (Nic) du siège de l'unité légale",
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -621,7 +650,8 @@ https://www.sirene.fr/sirene/public/variable/nicSiegeUniteLegale`,
       title: "Date du dernier traitement de l'unité légale dans le répertoire Sirene",
       'x-capabilities': {
         textStandard: false
-      }
+      },
+      'x-group': "Informations sur l'unité légale"
     },
     {
       key: 'categorieEntreprise',
@@ -645,7 +675,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         PME: 'petite ou moyenne entreprise',
         ETI: 'entreprise de taille intermédiaire',
         GE: 'grande entreprise'
-      }
+      },
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -655,7 +686,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
       title: "Année de validité de la catégorie d'entreprise",
       'x-capabilities': {
         textStandard: false
-      }
+      },
+      'x-group': "Informations sur l'unité légale"
     },
 
     {
@@ -668,7 +700,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         values: false
       },
       description: "Cette variable est un élément constitutif de l'adresse.\n\nC'est une variable facultative qui précise l'adresse avec :\n\nune indication d'étage, d'appartement, de porte, de N° de boîte à lettres,\nla désignation d'un bâtiment, d'un escalier, d'une entrée, d'un bloc,\nle nom d'une résidence, d'un ensemble\n\nhttps://www.sirene.fr/sirene/public/variable/complementAdresseEtablissement",
-      title: "Complément d'adresse"
+      title: "Complément d'adresse",
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'numeroVoieEtablissement',
@@ -681,7 +714,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         textAgg: false,
         text: false,
         values: false
-      }
+      },
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'indiceRepetitionEtablissement',
@@ -689,8 +723,9 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
       'x-capabilities': {
         textAgg: false
       },
-      description: "Cette variable un élément constitutif de l'adresse.\n\nElle doit être associée à la variable numeroVoieEtablissement.\n\nhttps://www.sirene.fr/sirene/public/variable/indiceRepetitionEtablissement",
-      title: 'Indice de répétition dans la voie'
+      description: "C'est' un élément constitutif de l'adresse.\n\nElle doit être associée à la variable numeroVoieEtablissement.\n\nhttps://www.sirene.fr/sirene/public/variable/indiceRepetitionEtablissement",
+      title: 'Indice de répétition dans la voie',
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'typeVoieEtablissement',
@@ -768,7 +803,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         ZAD: "Zone d'aménagement différé",
         ZI: 'Zone industrielle',
         ZONE: 'Zone'
-      }
+      },
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'libelleVoieEtablissement',
@@ -781,7 +817,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
       },
       description: "Cette variable indique le libellé de voie de la commune de localisation de l'établissement.\n\nC'est un élément constitutif de l'adresse.\n\nCette variable est facultative : elle n'est pas toujours renseignée, en particulier dans les petites communes.\n\nhttps://www.sirene.fr/sirene/public/variable/libelleVoieEtablissement",
       title: 'Libellé de voie',
-      'x-refersTo': 'http://schema.org/streetAddress'
+      'x-refersTo': 'http://schema.org/streetAddress',
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'codePostalEtablissement',
@@ -793,7 +830,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         text: false,
         textStandard: false
       },
-      title: 'Code postal'
+      title: 'Code postal',
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'libelleCommuneEtablissement',
@@ -805,7 +843,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         values: false
       },
       description: "Cette variable indique le libellé de la commune de localisation de l'établissement si celui-ci n'est pas à l'étranger.\n\nC'est un élément constitutif de l'adresse.\n\nhttps://www.sirene.fr/sirene/public/variable/libelleCommuneEtablissement",
-      title: 'Libellé de la commune'
+      title: 'Libellé de la commune',
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'libelleCommuneEtrangerEtablissement',
@@ -817,7 +856,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         values: false
       },
       description: "Cette variable est un élément constitutif de l'adresse pour les établissements situés sur le territoire étranger (la variable codeCommuneEtablissement est vide).\n\nhttps://www.sirene.fr/sirene/public/variable/libelleCommuneEtrangerEtablissement",
-      title: "Libellé de la commune pour un établissement situé à l'étranger"
+      title: "Libellé de la commune pour un établissement situé à l'étranger",
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'distributionSpecialeEtablissement',
@@ -829,7 +869,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         values: false
       },
       description: "La distribution spéciale reprend les éléments particuliers qui accompagnent une adresse de distribution spéciale. C'est un élément constitutif de l'adresse.\n\nhttps://www.sirene.fr/sirene/public/variable/distributionSpecialeEtablissement",
-      title: "Distribution spéciale de l'établissement"
+      title: "Distribution spéciale de l'établissement",
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'codeCommuneEtablissement',
@@ -838,7 +879,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
       title: "Code commune de l'établissement",
       'x-capabilities': {
         textStandard: false
-      }
+      },
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'codeCedexEtablissement',
@@ -850,7 +892,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         textStandard: false
       },
       description: "Cette variable est un élément constitutif de l'adresse.\n\nhttps://www.sirene.fr/sirene/public/variable/codeCedexEtablissement",
-      title: 'Code cedex'
+      title: 'Code cedex',
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'libelleCedexEtablissement',
@@ -861,7 +904,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         textStandard: false
       },
       description: "Cette variable indique le libellé correspondant au code cedex de l'établissement si celui-ci est non null. Ce libellé est le libellé utilisé dans la ligne 6 d'adresse pour l'acheminement postal.\n\nhttps://www.sirene.fr/sirene/public/variable/libelleCedexEtablissement",
-      title: 'Libellé du code cedex'
+      title: 'Libellé du code cedex',
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'codePaysEtrangerEtablissement',
@@ -873,7 +917,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         textStandard: false
       },
       description: "Cette variable désigne le code du pays de localisation de l'établissement pour les adresses à l'étranger.La variable codePaysEtrangerEtablissement commence toujours par 99 si elle est renseignée. Les 3 caractères suivants sont le code du pays étranger.\n\nhttps://www.sirene.fr/sirene/public/variable/codePaysEtrangerEtablissement",
-      title: "Code pays de l'adresse secondaire pour un établissement situé à l'étranger"
+      title: "Code pays de l'adresse secondaire pour un établissement situé à l'étranger",
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'libellePaysEtrangerEtablissement',
@@ -884,7 +929,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         text: false
       },
       description: "Cette variable indique le libellé du pays de localisation de l'établissement si celui-ci est à l'étranger.\n\nC'est un élément constitutif de l'adresse.\n\nhttps://www.sirene.fr/sirene/public/variable/libellePaysEtrangerEtablissement",
-      title: "Libellé du pays pour un établissement situé à l'étranger"
+      title: "Libellé du pays pour un établissement situé à l'étranger",
+      'x-group': "Adresse de l'établissement"
     },
     {
       key: 'complementAdresse2Etablissement',
@@ -896,7 +942,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         values: false
       },
       description: "Dans le cas où l'établissement dispose d'une entrée secondaire, cette variable est un élément constitutif de l'adresse secondaire.\n\nC'est une variable facultative qui précise l'adresse secondaire avec :\n\nune indication d'étage, d'appartement, de porte, de N° de boîte à lettres,\nla désignation d'un bâtiment, d'un escalier, d'une entrée, d'un bloc,\nle nom d'une résidence, d'un ensemble\n\nhttps://www.sirene.fr/sirene/public/variable/complementAdresse2Etablissement",
-      title: "Complément d'adresse secondaire"
+      title: "Complément d'adresse secondaire",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'numeroVoie2Etablissement',
@@ -909,7 +956,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         values: false
       },
       description: "C'est un élément constitutif de l'adresse secondaire.\n\nSi plusieurs numéros de voie sont indiqués (5-7, 5 à 7), l'information complète (5-7) ou (5 à 7) figure en complément d'adresse secondaire et le premier des numéros (5 dans l'exemple) est porté dans la variable numeroVoie2Etablissement.\n\nhttps://www.sirene.fr/sirene/public/variable/numeroVoie2Etablissement",
-      title: "Numéro de la voie de l'adresse secondaire"
+      title: "Numéro de la voie de l'adresse secondaire",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'indiceRepetition2Etablissement',
@@ -922,7 +970,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         values: false
       },
       description: "Cette variable un élément constitutif de l'adresse secondaire.\n\nElle doit être associée à la variable numeroVoie2Etablissement.\n\nhttps://www.sirene.fr/sirene/public/variable/indiceRepetition2Etablissement",
-      title: "Indice de répétition dans la voie pour l'adresse secondaire"
+      title: "Indice de répétition dans la voie pour l'adresse secondaire",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'typeVoie2Etablissement',
@@ -1000,7 +1049,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         ZAD: "Zone d'aménagement différé",
         ZI: 'Zone industrielle',
         ZONE: 'Zone'
-      }
+      },
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'libelleVoie2Etablissement',
@@ -1012,7 +1062,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         values: false
       },
       description: "Cette variable indique le libellé de la voie de l'adresse secondaire de l'établissement.\n\nC'est un élément constitutif de l'adresse secondaire.\n\nCette variable est facultative : elle n'est pas toujours renseignée, en particulier dans les petites communes.\n\nhttps://www.sirene.fr/sirene/public/variable/libelleVoie2Etablissement",
-      title: "Libellé de voie de l'adresse secondaire"
+      title: "Libellé de voie de l'adresse secondaire",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'codePostal2Etablissement',
@@ -1024,7 +1075,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         textStandard: false
       },
       description: "Dans le cas où l'établissement dispose d'une entrée secondaire, cette variable désigne le code postal de l'adresse secondaire de l'établissement.\n\nPour les adresses à l'étranger (codeCommune2Etablissement commence par 99), cette variable est à null.\n\nhttps://www.sirene.fr/sirene/public/variable/codePostal2Etablissement",
-      title: "Code postal de l'adresse secondaire"
+      title: "Code postal de l'adresse secondaire",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'libelleCommune2Etablissement',
@@ -1035,7 +1087,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         textStandard: false
       },
       description: "Cette variable indique le libellé de la commune de l'adresse secondaire de l'établissement si celui-ci n'est pas à l'étranger.\n\nC'est un élément constitutif de l'adresse.\n\nhttps://www.sirene.fr/sirene/public/variable/libelleCommune2Etablissement",
-      title: "Libellé de la commune de l'adresse secondaire"
+      title: "Libellé de la commune de l'adresse secondaire",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'libelleCommuneEtranger2Etablissement',
@@ -1046,7 +1099,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         text: false
       },
       description: "Dans le cas où l'établissement dispose d'une entrée secondaire, cette variable est un élément constitutif de l'adresse secondaire pour les établissements situés sur le territoire étranger (la variable codeCommune2Etablissement est vide).\n\nhttps://www.sirene.fr/sirene/public/variable/libelleCommuneEtranger2Etablissement",
-      title: "Libellé de la commune de l'adresse secondaire pour un établissement situé à l'étranger"
+      title: "Libellé de la commune de l'adresse secondaire pour un établissement situé à l'étranger",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'distributionSpeciale2Etablissement',
@@ -1058,7 +1112,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         values: false
       },
       description: "Dans le cas où l'établissement dispose d'une entrée secondaire, la distribution spéciale reprend les éléments particuliers qui accompagnent l'adresse secondaire de distribution spéciale. C'est un élément constitutif de l'adresse secondaire.\n\nhttps://www.sirene.fr/sirene/public/variable/distributionSpeciale2Etablissement",
-      title: "Distribution spéciale de l'adresse secondaire de l'établissement"
+      title: "Distribution spéciale de l'adresse secondaire de l'établissement",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'codeCommune2Etablissement',
@@ -1070,7 +1125,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         textStandard: false
       },
       description: "Dans le cas où l'établissement dispose d'une entrée secondaire, cette variable désigne le code de la commune de l'adresse secondaire de l'établissement, hors adresse à l'étranger.\n\nLe code commune correspond au code commune existant à la date de la mise à disposition : toute modification du code officiel géographique est répercutée sur la totalité des établissements (même ceux fermés) correspondant à ce code commune.\n\nPour les établissements localisés à l'étranger, la variable codeCommune2Etablissement est à null.\n\nhttps://www.sirene.fr/sirene/public/variable/codeCommune2Etablissement",
-      title: "Code commune de l'adresse secondaire"
+      title: "Code commune de l'adresse secondaire",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'codeCedex2Etablissement',
@@ -1082,7 +1138,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         textStandard: false
       },
       description: "Dans le cas où l'établissement dispose d'une entrée secondaire, c'est un élément constitutif de l'adresse secondaire.\n\nhttps://www.sirene.fr/sirene/public/variable/codeCedex2Etablissement",
-      title: "Code cedex de l'adresse secondaire"
+      title: "Code cedex de l'adresse secondaire",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'libelleCedex2Etablissement',
@@ -1093,7 +1150,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         textStandard: false
       },
       description: "Cette variable indique le libellé correspondant au code cedex de l'adresse secondaire de l'établissement si celui-ci est non null. Ce libellé est le libellé utilisé dans la ligne 6 d'adresse pour l'acheminement postal.\n\nhttps://www.sirene.fr/sirene/public/variable/libelleCedex2Etablissement",
-      title: "Libellé du code cedex de l'adresse secondaire"
+      title: "Libellé du code cedex de l'adresse secondaire",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'codePaysEtranger2Etablissement',
@@ -1105,7 +1163,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         textStandard: false
       },
       description: "Dans le cas où l'établissement dispose d'une entrée secondaire, cette variable désigne le code du pays de localisation de l'adresse secondaire de l'établissement pour les adresses à l'étranger.\n\nLa variable codePaysEtranger2Etablissement commence toujours par 99 si elle est renseignée. Les 3 caractères suivants sont le code du pays étranger.\n\nhttps://www.sirene.fr/sirene/public/variable/codePaysEtranger2Etablissement",
-      title: "Code pays pour un établissement situé à l'étranger"
+      title: "Code pays pour un établissement situé à l'étranger",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'libellePaysEtranger2Etablissement',
@@ -1116,17 +1175,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         text: false
       },
       description: "Cette variable indique le libellé du pays de localisation de l'adresse secondaire de l'établissement si celui-ci est à l'étranger.\n\nC'est un élément constitutif de l'adresse.\n\nhttps://www.sirene.fr/sirene/public/variable/libellePaysEtranger2Etablissement",
-      title: "Libellé du pays de l'adresse secondaire pour un établissement situé à l'étranger"
-    },
-    {
-      key: 'dateDebut',
-      type: 'string',
-      format: 'date',
-      description: "Date de début de la période au cours de laquelle toutes les variables historisées de l'entreprise restent inchangées.La date 1900-01-01 signifie : date non déterminée. dateDebut peut-être vide uniquement pour les unités purgées (cf. variable unitePurgeeUniteLegale).\n\nLa date de début de la période la plus ancienne ne correspond pas obligatoirement à la date de création de l'entreprise, certaines variables historisées pouvant posséder des dates de début soit au 1900-01-01, soit antérieures à la date de création.\n\nhttps://www.sirene.fr/sirene/public/variable/dateDebut_UniteLegale",
-      title: "Date de début d'une période d'historique d'une unité légale",
-      'x-capabilities': {
-        textStandard: false
-      }
+      title: "Libellé du pays de l'adresse secondaire pour un établissement situé à l'étranger",
+      'x-group': "Adresse secondaire de l'établissement"
     },
     {
       key: 'etatAdministratifEtablissement',
@@ -1142,7 +1192,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
       'x-labels': {
         A: 'Actif',
         F: 'Fermé'
-      }
+      },
+      'x-group': "Informations sur l'établissement"
     },
     {
       key: 'enseigne1Etablissement',
@@ -1154,7 +1205,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         values: false
       },
       description: "Les trois variables enseigne1Etablissement, enseigne2Etablissement et enseigne3Etablissement contiennent la ou les enseignes de l'établissement.\n\nL'enseigne identifie l'emplacement ou le local dans lequel est exercée l'activité. Un établissement peut posséder une enseigne, plusieurs enseignes ou aucune.\n\nL'analyse des enseignes et de son découpage en trois variables dans Sirene montre deux cas possibles : soit les 3 champs concernent 3 enseignes bien distinctes, soit ces trois champs correspondent au découpage de l'enseigne qui est déclarée dans la liasse (sur un seul champ) avec une continuité des trois champs.\n\nExemples :\n\nSIRET=53053581400178\n\n\"enseigne1Etablissement\": \"LES SERRURIERS DES YVELINES LES VITRIERS DES YVELI\",\n\"enseigne2Etablissement\": \"NES LES CHAUFFAGISTES DES YVELINES LES PLATRIERS D\",\n\"enseigne3Etablissement\": \"ES YVELINES LES ELECTRICIENS DES YVELINES.\"\nSIRET=05439181800033\n\n\"enseigne1Etablissement\": \"HALTE OCCASIONS\",\n\"enseigne2Etablissement\": \"OUTRE-MER LOCATION\",\n\"enseigne3Etablissement\": \"OUTRE-MER TRANSIT\".\n\nhttps://www.sirene.fr/sirene/public/variable/enseigne1Etablissement",
-      title: "Première ligne d'enseigne de l'établissement"
+      title: "Première ligne d'enseigne de l'établissement",
+      'x-group': "Identification de l'établissement"
     },
     {
       key: 'enseigne2Etablissement',
@@ -1166,7 +1218,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         values: false
       },
       description: 'https://www.sirene.fr/sirene/public/variable/enseigne2Etablissement',
-      title: "Deuxième ligne d'enseigne de l'établissement"
+      title: "Deuxième ligne d'enseigne de l'établissement",
+      'x-group': "Identification de l'établissement"
     },
     {
       key: 'enseigne3Etablissement',
@@ -1178,7 +1231,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         values: false
       },
       description: 'https://www.sirene.fr/sirene/public/variable/enseigne3Etablissement',
-      title: "Troisième ligne d'enseigne de l'établissement"
+      title: "Troisième ligne d'enseigne de l'établissement",
+      'x-group': "Identification de l'établissement"
     },
     {
       key: 'denominationUsuelleEtablissement',
@@ -1188,7 +1242,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         textStandard: false
       },
       description: "Cette variable désigne le nom sous lequel l'établissement est connu du grand public.\n\nCet élément d'identification de l'établissement a été enregistré au niveau établissement depuis l'application de la norme d'échanges CFE de 2008. Avant la norme 2008, la dénomination usuelle était enregistrée au niveau de l'unité légale sur trois champs (cf. variables denominationUsuelle1UniteLegale à denominationUsuelle3UniteLegale dans le descriptif des variables du fichier StockUniteLegale).\n\nhttps://www.sirene.fr/sirene/public/variable/denominationUsuelleEtablissement",
-      title: "Dénomination usuelle de l'établissement"
+      title: "Dénomination usuelle de l'établissement",
+      'x-group': "Identification de l'établissement"
     },
     {
       key: 'activitePrincipaleEtablissement',
@@ -1200,7 +1255,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         textStandard: false
       },
       description: "Lors de son inscription au répertoire, l'Insee attribue à tout établissement un code dit « APE » sur la base de la description de l'activité principale faite par le déclarant. Ce code est modifiable au cours de la vie de l'établissement en fonction des déclarations de l'exploitant.\n\nPour chaque établissement, il existe à un instant donné un seul code « APE ». Il est attribué selon la nomenclature en vigueur. La nomenclature en vigueur est la Naf Rév2 et ce depuis le 1er Janvier 2008. Chaque code comporte 2 chiffres, un point, 2 chiffres et une lettre. Tous les établissements actifs au 01/01/2008 ont eu leur code APE recodé dans la nouvelle nomenclature, ainsi de très nombreux établissements ont une période débutant à cette date.\n\nAu moment de la déclaration de l'entreprise, il peut arriver que l'Insee ne soit pas en mesure d'attribuer le bon code APE : la modalité 00.00Z peut alors être affectée provisoirement.\n\nhttps://www.sirene.fr/sirene/public/variable/activitePrincipaleEtablissement",
-      title: "Activité principale de l'établissement pendant la période"
+      title: "Activité principale de l'établissement pendant la période",
+      'x-group': "Informations sur l'établissement"
     },
     {
       key: 'nomenclatureActivitePrincipaleEtablissement',
@@ -1219,7 +1275,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
         NAFRev1: 'NAFRev1',
         NAF1993: 'NAF1993',
         NAP: 'NAP'
-      }
+      },
+      'x-group': "Informations sur l'établissement"
     },
     {
       key: 'caractereEmployeurEtablissement',
@@ -1235,7 +1292,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
       'x-labels': {
         O: 'établissement employeur',
         N: 'établissement non employeur'
-      }
+      },
+      'x-group': "Informations sur l'établissement"
     }
   ]
 }
