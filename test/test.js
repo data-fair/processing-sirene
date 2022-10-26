@@ -5,7 +5,7 @@ const assert = require('assert').strict
 const testUtils = require('@data-fair/processings-test-utils')
 const sireneProcessing = require('../')
 
-describe('Hello world processing', () => {
+describe('Sirene processing', () => {
   const app = express()
   let server
   app.use(express.static('test/resources'))

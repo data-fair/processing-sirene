@@ -1,5 +1,7 @@
 # data-fair/processing-sirene
 
+Load french Sirene database into a data-fair dataset.
+
 ## Release
 
 Processing plugins are fetched from the npm registry with a filter on keyword "data-fair-processings-plugin". So publishing a plugin is as simple as publishing the npm package:
