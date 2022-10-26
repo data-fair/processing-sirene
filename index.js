@@ -36,7 +36,7 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
     await log.info(`le jeu de donnée existe, id="${dataset.id}", title="${dataset.title}"`)
   }
 
-  log.step('Récupération des modifications de la dernière date de traitement')
+  await log.step('Récupération des modifications de la dernière date de traitement')
   const lastLine = (await axios.get(`/api/v1/datasets/${dataset.id}/lines`, { params: { sort: '-dateDernierTraitementEtablissement', size: 1 } }))
     .data.results[0]
   const start = lastLine && lastLine.dateDernierTraitementEtablissement.split('+')[0]
@@ -44,9 +44,9 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
   else log.info('pas de date du dernier traitement, toutes les données seront parcourues')
 
   // cf https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3&provider=insee#!/Etablissement/findSiretByQ
-  log.step('Interrogation de l\'API Sirene')
+  await log.step('Interrogation de l\'API Sirene')
   const bulkSize = 1000 // max is 1000
-  log.info(`interroge l'API Sirene, création d'un curseur long avec lots de ${bulkSize} lignes`)
+  await log.info(`création d'un curseur long avec lots de ${bulkSize} lignes`)
   let curseurSuivant = '*'
   let nbDone = 0
   await log.task('transfert des établissements vers le jeu de données')
