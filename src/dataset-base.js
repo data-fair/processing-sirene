@@ -281,7 +281,7 @@ Elle peut être non renseignée pour les personnes morales.
 
 https://www.sirene.fr/sirene/public/variable/sigleUniteLegale
       `,
-      title: "Dénomination de l'unité légale"
+      title: "Sigle de l'unité légale"
     },
 
     {
