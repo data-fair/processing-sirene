@@ -39,11 +39,6 @@
   }, {
     "title": "Paramètres",
     "properties": {
-      "stockUrl": {
-        "type": "string",
-        "title": "URL du fichier dernier fichier de stock Sirene",
-        "default": "https://files.data.gouv.fr/insee-sirene/StockEtablissement_utf8.zip"
-      },
       "apiSireneAccessToken": {
         "type": "String",
         "title": "Jeton d'accès à l'API Sirene de l'Insee",

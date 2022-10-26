@@ -1,8 +1,8 @@
-const path = require('path')
-const FormData = require('form-data')
-const fs = require('fs-extra')
-const { fetch } = require('./src/files')
+const zlib = require('zlib')
+const csvStringify = require('csv-stringify/sync').stringify
 const datasetBase = require('./src/dataset-base')
+const acceptedKeys = datasetBase.schema.map(s => s.key)
+// console.log('acceptedKeys', acceptedKeys)
 
 // a global variable to manage interruption
 let _stopped
@@ -29,31 +29,6 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
     await log.info(`jeu de donnée créé, id="${dataset.id}", title="${dataset.title}"`)
     await patchConfig({ datasetMode: 'update', dataset: { id: dataset.id, title: dataset.title } })
     await ws.waitForJournal(dataset.id, 'finalize-end')
-
-    log.step('Import du dernier fichier stock')
-    if (_stopped) return await log.info('interruption demandée')
-    const stockFilePath = await fetch(
-      log,
-      processingConfig.stockUrl || 'https://files.data.gouv.fr/insee-sirene/StockEtablissement_utf8.zip',
-      path.join(tmpDir, 'download'),
-      false
-    )
-
-    log.info('import de l\'archive zip dans le jeu de données créé')
-    const form = new FormData()
-    form.append('actions', fs.createReadStream(stockFilePath), 'stock.zip')
-    const contentLength = await new Promise((resolve, reject) => form.getLength((err, length) => err ? reject(err) : resolve(length)))
-    const bulkRes = (await axios.post(`api/v1/datasets/${dataset.id}/_bulk_lines`, form, {
-      params: { lock: true },
-      headers: { 'Content-Length': contentLength, ...form.getHeaders() }
-    })).data
-    const errors = bulkRes.errors
-    delete bulkRes.errors
-    log.info('réception des lignes du fichier de stock', bulkRes)
-    if (bulkRes.nbErrors) {
-      log.warning(`${bulkRes.nbErrors} lines were rejected with errors`, JSON.stringify(errors))
-    }
-    await ws.waitForJournal(dataset.id, 'finalize-end', 24 * 60 * 60 * 1000)
   } else if (processingConfig.datasetMode === 'update') {
     await log.step('Vérification du jeu de données')
     dataset = (await axios.get(`api/v1/datasets/${processingConfig.dataset.id}`)).data
@@ -61,27 +36,61 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
     await log.info(`le jeu de donnée existe, id="${dataset.id}", title="${dataset.title}"`)
   }
 
-  log.step('Récupération des modifications depuis la dernière date de traitement')
+  log.step('Récupération des modifications de la dernière date de traitement')
   const lastLine = (await axios.get(`/api/v1/datasets/${dataset.id}/lines`, { params: { sort: '-dateDernierTraitementEtablissement', size: 1 } }))
     .data.results[0]
-  if (!lastLine) throw new Error('Aucune ligne trouvée, le fichier stock n\'a pas du être correctement chargé.')
-  log.info('date du dernier traitement', lastLine.dateDernierTraitementEtablissement)
+  const start = lastLine && lastLine.dateDernierTraitementEtablissement.split('+')[0]
+  if (start) log.info('date du dernier traitement', start)
+  else log.info('pas de date du dernier traitement, toutes les données seront parcourues')
 
   // cf https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3&provider=insee#!/Etablissement/findSiretByQ
-  const start = lastLine.dateDernierTraitementEtablissement.split('+')[0]
-  log.info(`interroge l'API Sirene après ${start}`)
-  const sireneApiRes = (await axios.get('https://api.insee.fr/entreprises/sirene/V3/siret', {
-    params: {
-      tri: 'dateDernierTraitementEtablissement',
-      q: `dateDernierTraitementEtablissement:[${start} TO *]`,
-      nombre: 1,
-      curseur: '*'
-    },
-    headers: {
-      Authorization: 'Bearer ' + processingConfig.apiSireneAccessToken
+  log.step('Interrogation de l\'API Sirene')
+  const bulkSize = 1000 // max is 1000
+  log.info(`interroge l'API Sirene, création d'un curseur long avec lots de ${bulkSize} lignes`)
+  let curseurSuivant = '*'
+  const iterate = async () => {
+    const sireneApiRes = await axios.get('https://api.insee.fr/entreprises/sirene/V3/siret', {
+      params: {
+        tri: 'dateDernierTraitementEtablissement',
+        q: start ? `dateDernierTraitementEtablissement:[${start} TO *]` : '',
+        nombre: bulkSize,
+        curseur: curseurSuivant
+      },
+      headers: {
+        Authorization: 'Bearer ' + processingConfig.apiSireneAccessToken
+      }
+    })
+    const etabs = sireneApiRes.data.etablissements
+    etabs.forEach(etab => {
+      // flatten some properties
+      Object.assign(etab, etab.uniteLegale)
+      Object.assign(etab, etab.adresseEtablissement)
+      Object.assign(etab, etab.adresse2Etablissement)
+    })
+    const csv = csvStringify(etabs, { columns: acceptedKeys, header: true })
+    const bulkRes = (await axios.post(`api/v1/datasets/${processingConfig.dataset.id}/_bulk_lines`, zlib.gzipSync(csv), { headers: { 'content-type': 'text/csv+gzip' } })).data
+    if (bulkRes.nbErrors) {
+      await log.error(`l'envoi des lignes vers data-fair a rencontré des erreurs ${bulkRes.nbErrors} / ${etabs.length}`, bulkRes.errors[0])
     }
-  })).data
-  console.log(sireneApiRes.etablissements[0])
+    if (sireneApiRes.data.header.curseurSuivant === sireneApiRes.data.header.curseur) {
+      log.info('fin du curseur')
+      return false
+    }
+    curseurSuivant = sireneApiRes.data.header.curseurSuivant
+    return true
+  }
+
+  while (true) {
+    if (_stopped) {
+      await log.warning('interrompu proprement pendant l\'attente')
+      break
+    }
+    const [keepGoing] = await Promise.all([
+      iterate(),
+      new Promise(resolve => setTimeout(resolve, 2100)) // respect rate limiting of 30 reqs per minute
+    ])
+    if (!keepGoing) break
+  }
 }
 
 // used to manage interruption

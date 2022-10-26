@@ -78,6 +78,11 @@ module.exports = {
       description: "Il s'agit d'une variable statistique, millésimée au 31/12 d'une année donnée (voir variable anneeEffectifsEtablissement).\n\nhttps://www.sirene.fr/sirene/public/variable/trancheEffectifsEtablissement",
       title: "Tranche d'effectif salarié de l'établissement",
       'x-labels': {
+        NN: 'Etablissement non employeur',
+        '00': '0 salarié',
+        '01': '1 ou 2 salariés',
+        '02': '3 à 5 salariés',
+        '03': '6 à 9 salariés',
         11: '10 à 19 salariés',
         12: '20 à 49 salariés',
         21: '50 à 99 salariés',
@@ -88,12 +93,7 @@ module.exports = {
         42: '1 000 à 1 999 salariés',
         51: '2 000 à 4 999 salariés',
         52: '5 000 à 9 999 salariés',
-        53: '10 000 salariés et plus',
-        NN: 'Etablissement non employeur',
-        '00': '0 salarié',
-        '01': '1 ou 2 salariés',
-        '02': '3 à 5 salariés',
-        '03': '6 à 9 salariés'
+        53: '10 000 salariés et plus'
       }
     },
     {
@@ -122,8 +122,7 @@ module.exports = {
       title: "Date du dernier traitement de l'établissement dans le répertoire Sirene",
       'x-capabilities': {
         textStandard: false
-      },
-      dateTimeFormat: 'YYYY-MM-DDTHH:mm:ss'
+      }
     },
     {
       key: 'etablissementSiege',
@@ -140,6 +139,525 @@ module.exports = {
       description: "Cette variable donne le nombre de périodes [dateDebut,dateFin] de l'établissement. Chaque période correspond à l'intervalle de temps pendant lequel la totalité des variables historisées de l'établissement n'ont pas été modifiées.\n\nLes dates de ces périodes sont des dates d'effet (et non des dates de traitement).\n\nhttps://www.sirene.fr/sirene/public/variable/nombrePeriodesEtablissement",
       title: "Nombre de périodes de l'établissement"
     },
+
+    {
+      key: 'etatAdministratifUniteLegale',
+      type: 'string',
+      title: "État administratif de l'unité légale",
+      description: `Le passage à l'état « Cessée » découle de la prise en compte d'une déclaration de cessation administrative. Pour les personnes morales, cela correspond au dépôt de la déclaration de disparition de la personne morale. Pour les personnes physiques, cela correspond soit à la prise en compte de la déclaration de cessation d'activité déposée par l'exploitant soit au décès de l'exploitant conformément à la réglementation. En dehors de ces cas, l'unité légale est toujours à l'état administratif « Active ».
+
+Pour les personnes morales, la cessation administrative est, en théorie, définitive, l'état administratif "Cessée" est irréversible.
+      
+Cependant, il existe actuellement dans la base un certain nombre d'unités légales personnes morales avec un historique d'état présentant un état cessé entre deux périodes à l'état actif. Pour les personnes physiques, dans le cas où l'exploitant déclare la cessation de son activité, puis la reprend quelque temps plus tard, cet état est réversible. Il est donc normal d'avoir des périodes successives d'état actif puis cessé pour les personnes physiques. En règle générale, la première période d'historique d'une unité légale correspond à un etatAdministratifUniteLegale égal à « Active ». Toutefois, l'état administratif peut être à null (première date de début de l'état postérieure à la première date de début d'une autre variable historisée).
+
+https://www.sirene.fr/sirene/public/variable/etatAdministratifUniteLegale`,
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      'x-labels': {
+        A: 'Actif',
+        F: 'Fermé'
+      }
+    },
+
+    {
+      key: 'statutDiffusionUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false,
+        values: false
+      },
+      description: 'Seules les unités légales diffusibles sont accessibles à tout public (statutDiffusionUniteLegale=O).\n\nhttps://www.sirene.fr/sirene/public/variable/statutDiffusionUniteLegale',
+      'x-labels': {
+        O: 'unité légale faisant partie de la diffusion publique',
+        N: 'personne physique ayant demandé à être exclue de la diffusion'
+      },
+      title: "Statut de diffusion de l'unité légale"
+    },
+
+    {
+      key: 'unitePurgeeUniteLegale',
+      type: 'boolean',
+      description: `Cette variable indique si l'unité légale a été purgée.
+
+      Pour des raisons de capacité de stockage des données, les données concernant les entreprises cessées avant le 31/12/2002 ont été purgées.
+      
+Pour ces unités cessées dites purgées :
+      
+Seules les dernières valeurs des variables de niveau Unité Légale et de niveau Etablissement sont conservées
+En théorie, seul l'établissement siège au moment de la purge est conservé avec uniquement les dernières valeurs de cet établissement. Toutefois, pour plus de 300 unités légales purgées de la base, cette règle n'est pas respectée et ces unités ont toujours plus d'un établissement en base sans pouvoir garantir que tous les établissements ont été conservés.
+Plus de 4 millions d'unités légales sont purgées. Plus d'une unité purgée sur quatre a une date de création indéterminée.
+      
+Diffusion des unités purgées : l'état administratif de l'unité purgée est : cessé. L'indicatrice unitePurgeeUniteLegale est présente et est égale à true.
+      
+Diffusion des établissements des unités purgées : une seule période avec dateDebut=date de début de l'état fermé si cette date est renseignée, sinon dateDebut (établissement) est à null. L'état administratif de l'établissement est : fermé.
+
+https://www.sirene.fr/sirene/public/variable/unitePurgeeUniteLegale`,
+      title: 'Unité légale purgée',
+      'x-capabilities': {
+        textStandard: false
+      }
+    },
+
+    {
+      key: 'dateCreationUniteLegale',
+      type: 'string',
+      format: 'date',
+      description: `
+La date de création correspond à la date qui figure dans les statuts de l'entreprise qui sont déposés au CFE compétent.
+
+Pour les unités purgées (unitePurgeeUniteLegale=true) : si la date de création est au 01/01/1900 dans Sirene, la date est forcée à null.
+      
+Dans tous les autres cas, la date de création n'est jamais à null. Si elle est non renseignée, elle sera au 01/01/1900. La date de création ne correspond pas obligatoirement à dateDebut de la première période de l'unité légale.
+      
+Certaines variables historisées peuvent posséder des dates de début soit au 01/01/1900, soit antérieures à la date de création.
+
+https://www.sirene.fr/sirene/public/variable/dateCreationUniteLegale`,
+      'x-capabilities': {
+        textStandard: false
+      },
+      title: "Date de création de l'unité légale"
+    },
+
+    {
+      key: 'categorieJuridiqueUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: `
+Cette variable est à 1000 pour les personnes physiques.
+
+Lors de son dépôt de demande de création, le déclarant indique la forme juridique de l'unité légale qu'il crée, qui est ensuite traduite en code. Ce code est modifiable, à la marge, au cours de la vie de l'unité légale (pour les personnes morales) en fonction des déclarations de l'exploitant. Pour chaque unité légale, il existe à un instant donné un seul code Catégorie juridique. Il est attribué selon la nomenclature en vigueur.
+      
+https://www.sirene.fr/sirene/public/variable/categorieJuridiqueUniteLegale`,
+      title: "Catégorie juridique de l'unité légale"
+    },
+
+    {
+      key: 'denominationUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        textStandard: false
+      },
+      description: `
+Cette variable désigne la raison sociale pour les personnes morales. Il s'agit du nom sous lequel est déclarée l'unité légale.
+
+Cette variable est à null pour les personnes physiques.
+
+La dénomination peut parfois contenir la mention de la forme de la société (SA, SAS, SARL, etc.).
+
+https://www.sirene.fr/sirene/public/variable/denominationUniteLegale
+      `,
+      title: "Dénomination de l'unité légale"
+    },
+
+    {
+      key: 'sigleUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false
+      },
+      description: `
+Un sigle est une forme réduite de la raison sociale ou de la dénomination d'une personne morale ou d'un organisme public.
+
+Il est habituellement constitué des initiales de certains des mots de la dénomination. Afin d'en faciliter la prononciation, il arrive qu'on retienne les deux ou trois premières lettres de certains mots : il s'agit alors, au sens strict, d'un acronyme; mais l'usage a étendu à ce cas l'utilisation du terme sigle.
+      
+Cette variable est à null pour les personnes physiques.
+      
+Elle peut être non renseignée pour les personnes morales.
+
+https://www.sirene.fr/sirene/public/variable/sigleUniteLegale
+      `,
+      title: "Dénomination de l'unité légale"
+    },
+
+    {
+      key: 'sexeUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: `
+Cette variable est à null pour les personnes morales.
+
+La variable sexeUniteLegale est également non renseignée pour quelques personnes physiques.
+
+https://www.sirene.fr/sirene/public/variable/sexeUniteLegale
+      `,
+      title: 'Caractère féminin ou masculin de la personne physique',
+      'x-labels': {
+        M: 'Masculin',
+        F: 'Féminin'
+      }
+    },
+
+    {
+      key: 'nomUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        textStandard: false
+      },
+      description: `
+Cette variable indique le libellé le nom de naissance pour une personne physique.
+
+Cette variable est à null pour les personnes morales.
+
+https://www.sirene.fr/sirene/public/variable/nomUniteLegale
+      `,
+      title: 'Nom de naissance de la personnes physique'
+    },
+
+    {
+      key: 'nomUsageUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        textStandard: false
+      },
+      description: `
+Le nom d'usage est celui que la personne physique a choisi d'utiliser.
+
+Cette variable est à null pour les personnes morales. Elle peut être également à null pour les personnes physiques.
+
+https://www.sirene.fr/sirene/public/variable/nomUsageUniteLegale
+      `,
+      title: "Nom d'usage de la personne physique"
+    },
+
+    {
+      key: 'prenom1UniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        textStandard: false
+      },
+      description: `
+Les variables prenom1UniteLegale à prenom4UniteLegale sont les prénoms déclarés pour une personne physique.
+
+Ces variables sont à null pour les personnes morales.
+      
+Toute personne physique sera identifiée au minimum par son nom de naissance et son premier prénom.
+      
+La variable prenom1UniteLegale peut être à null pour des personnes physiques (unités purgées).
+
+https://www.sirene.fr/sirene/public/variable/prenom1UniteLegale
+      `,
+      title: 'Premier prénom déclaré pour une personne physique'
+    },
+
+    {
+      key: 'prenom2UniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        textStandard: false
+      },
+      description: 'https://www.sirene.fr/sirene/public/variable/prenom2UniteLegale',
+      title: 'Deuxième prénom déclaré pour une personne physique'
+    },
+
+    {
+      key: 'prenom3UniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        textStandard: false
+      },
+      description: 'https://www.sirene.fr/sirene/public/variable/prenom3UniteLegale',
+      title: 'Troisième prénom déclaré pour une personne physique'
+    },
+
+    {
+      key: 'prenom4UniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        textStandard: false
+      },
+      description: 'https://www.sirene.fr/sirene/public/variable/prenom4UniteLegale',
+      title: 'Quatrième prénom déclaré pour une personne physique'
+    },
+
+    {
+      key: 'prenomUsuelUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        textStandard: false
+      },
+      description: `
+Le prénom usuel est le prénom par lequel une personne choisit de se faire appeler dans la vie courante, parmi l'ensemble de ceux qui lui ont été donnés à sa naissance et qui sont inscrits à l'état civil.
+
+Il correspond généralement au prenom1UniteLegale.
+
+https://www.sirene.fr/sirene/public/variable/prenomUsuelUniteLegale`,
+      title: 'Prénom usuel de la personne physique'
+    },
+
+    {
+      key: 'pseudonymeUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        textStandard: false
+      },
+      description: `
+Cette variable correspond au nom qu'une personne utilise pour se désigner dans l'exercice de son activité, généralement littéraire ou artistique.
+
+Le pseudonyme est protégé, comme le nom de famille, contre l'usurpation venant d'un tiers.
+
+https://www.sirene.fr/sirene/public/variable/pseudonymeUniteLegale`,
+      title: 'Pseudonyme de la personne physique'
+    },
+
+    {
+      key: 'activitePrincipaleUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: `
+Lors de son inscription au répertoire, l'Insee attribue à toute unité légale un code dit « APE » sur la base de la description de l'activité principale faite par le déclarant. Ce code est modifiable au cours de la vie de l'unité légale en fonction des déclarations de l'exploitant.
+
+Pour chaque unité légale, il existe à un instant donné un seul code « APE». Il est attribué selon la nomenclature en vigueur. La nomenclature en vigueur est la Naf Rév2 et ce depuis le 1er Janvier 2008. Chaque code comporte 2 chiffres, un point, 2 chiffres et une lettre. Toutes les unités légales actives au 01/01/2008 ont eu leur code APE recodé dans la nouvelle nomenclature, ainsi de très nombreuses entreprises ont une période débutant à cette date.
+      
+Au moment de la déclaration de l'entreprise, il peut arriver que l'Insee ne soit pas en mesure d'attribuer le bon code APE : la modalité 00.00Z peut alors être affectée provisoirement.
+
+https://www.sirene.fr/sirene/public/variable/activitePrincipaleUniteLegale`,
+      title: "Activité principale de l'unité légale"
+    },
+    {
+      key: 'nomenclatureActivitePrincipaleUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false,
+        values: false
+      },
+      description: `Cette variable indique la nomenclature d'activité correspondant à la variable activitePrincipaleUniteLegale.
+
+(cf. ActivitePrincipaleUniteLegale)
+
+https://www.sirene.fr/sirene/public/variable/nomenclatureActivitePrincipaleEtablissement`,
+      title: "Nomenclature d'activité de la variable activitePrincipaleUniteLegale",
+      'x-labels': {
+        NAFRev2: 'NAFRev2',
+        NAFRev1: 'NAFRev1',
+        NAF1993: 'NAF1993',
+        NAP: 'NAP'
+      }
+    },
+
+    {
+      key: 'identifiantAssociationUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: `
+Lors de sa déclaration en préfecture, l'association reçoit automatiquement un numéro d'inscription au RNA. Elle doit en outre demander son immatriculation au répertoire Sirene lorsqu'elle souhaite demander des subventions auprès de l'État ou des collectivités territoriales, lorsqu'elle emploie des salariés ou lorsqu'elle exerce des activités qui conduisent au paiement de la TVA ou de l'impôt sur les sociétés.
+
+Le RNA est le fichier national, géré par le ministère de l'Intérieur, qui recense l'ensemble des informations sur les associations.
+
+https://www.sirene.fr/sirene/public/variable/identifiantAssociationUniteLegale`,
+      title: 'Numéro au Répertoire National des Associations'
+    },
+
+    {
+      key: 'economieSocialeSolidaireUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: `
+Cette variable indique si l'entreprise appartient au champ de l'économie sociale et solidaire. La loi n° 2014-856 du 31 juillet 2014 définit officiellement le périmètre de l'économie sociale et solidaire (ESS). Celle-ci comprend les quatre familles traditionnelles en raison de leur régime juridique (associations, fondations, coopératives et mutuelles) et inclut une nouvelle catégorie, les entreprises de l'ESS, adhérant aux mêmes principes :
+
+poursuivre un but social autre que le seul partage des bénéfices ;
+un caractère lucratif encadré (notamment des bénéfices majoritairement consacrés au maintien et au développement de l'activité) ;
+une gouvernance démocratique et participative.
+
+https://www.sirene.fr/sirene/public/variable/economieSocialeSolidaireUniteLegale`,
+      title: "Appartenance au champ de l'économie sociale et solidaire",
+      'x-labels': {
+        O: "l'entreprise appartient au champ de l'économie sociale et solidaire",
+        N: "l'entreprise n'appartient pas au champ de l'économie sociale et solidaire"
+      }
+    },
+
+    {
+      key: 'societeMissionUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: `
+Cette variable indique si l'entreprise appartient au champ des sociétés à mission. L'article 176 de la loi du 22 mai 2019 relative à la croissance et la transformation des entreprises, dite loi Pacte, introduit la qualité de société à mission. Il permet à une société de faire publiquement état de la qualité de société à mission en précisant sa raison d'être ainsi quun ou plusieurs objectifs sociaux et environnementaux que la société se donne pour mission de poursuivre dans le cadre de son activité.
+
+https://www.sirene.fr/sirene/public/variable/societeMissionUniteLegale`,
+      title: 'Appartenance au champ des sociétés à mission',
+      'x-labels': {
+        O: "l'entreprise appartient au champ des sociétés à mission",
+        N: "l'entreprise n'appartient pas au champ des sociétés à mission"
+      }
+    },
+
+    {
+      key: 'caractereEmployeurUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: `Lors de sa formalité de création, le déclarant indique si l'unité légale aura ou non des employés. Par la suite, le déclarant peut également faire des déclarations de prise d'emploi et de fin d'emploi. La prise en compte d'une déclaration de prise d'emploi bascule immédiatement l'unité légale en « Employeuse ». Inversement, lorsqu'une déclaration de fin d'emploi est traitée, l'unité légale devient « Non employeuse ».
+
+Le caractère employeur est O si au moins l'un des établissements actifs de l'unité légale emploie des salariés.
+      
+https://www.sirene.fr/sirene/public/variable/caractereEmployeurUniteLegale`,
+      title: "Caractère employeur de l'établissement",
+      'x-labels': {
+        O: 'unité légale employeuse',
+        N: 'unité légale non employeuse'
+      }
+    },
+
+    {
+      key: 'trancheEffectifsUniteLegale',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: "Il s'agit d'une variable statistique, millésimée au 31/12 d'une année donnée (voir variable anneeEffectifsUniteLegale).\n\nhttps://www.sirene.fr/sirene/public/variable/trancheEffectifsUniteLegale",
+      title: "Tranche d'effectif salarié de l'unité légale",
+      'x-labels': {
+        NN: 'Unité non employeuse',
+        '00': '0 salarié',
+        '01': '1 ou 2 salariés',
+        '02': '3 à 5 salariés',
+        '03': '6 à 9 salariés',
+        11: '10 à 19 salariés',
+        12: '20 à 49 salariés',
+        21: '50 à 99 salariés',
+        22: '100 à 199 salariés',
+        31: '200 à 249 salariés',
+        32: '250 à 499 salariés',
+        41: '500 à 999 salariés',
+        42: '1 000 à 1 999 salariés',
+        51: '2 000 à 4 999 salariés',
+        52: '5 000 à 9 999 salariés',
+        53: '10 000 salariés et plus'
+      }
+    },
+    {
+      key: 'anneeEffectifsUniteLegale',
+      type: 'integer',
+      description: "Seule la dernière année de mise à jour de l'effectif salarié de l'unité légale est donnée si celle-ci est inférieure ou égale à l'année d'interrogation-3. Ainsi une interrogation en 2018 ne renverra la dernière année de mise à jour de l'effectif que si cette année est supérieure ou égale à 2015.\n\nhttps://www.sirene.fr/sirene/public/variable/anneeEffectifsEtablissement",
+      title: "Année de validité de la tranche d'effectif salarié de l'unité légale",
+      'x-capabilities': {
+        textStandard: false
+      }
+    },
+
+    {
+      key: 'nicSiegeUniteLegale',
+      type: 'string',
+      description: `Le siège d'une unité légale est le lieu où sont centralisées l'administration et la direction effective de l'unité légale.
+
+À un instant donné, chaque unité légale a un seul siège. Mais, au cours de la vie de l'unité légale, le siège peut être différent. Chaque siège est identifié par un numéro Nic (Numéro Interne de Classement de l'établissement) qui respecte les règles d'attribution des numéros d'établissement.
+      
+Le Nic est composé de quatre chiffres et d'un cinquième qui permet de contrôler la validité du numéro Siret (concaténation du numéro Siren et du Nic).
+
+https://www.sirene.fr/sirene/public/variable/nicSiegeUniteLegale`,
+      'x-capabilities': {
+        insensitive: false,
+        textAgg: false,
+        text: false,
+        textStandard: false,
+        values: false
+      },
+      title: "Numéro interne de classement (Nic) du siège de l'unité légale"
+    },
+
+    {
+      key: 'dateDernierTraitementUniteLegale',
+      type: 'string',
+      format: 'date-time',
+      description: 'Cette date peut concerner des mises à jour de données du répertoire Sirene qui ne sont pas diffusées.\n\nhttps://www.sirene.fr/sirene/public/variable/dateDernierTraitementUniteLegale',
+      title: "Date du dernier traitement de l'unité légale dans le répertoire Sirene",
+      'x-capabilities': {
+        textStandard: false
+      }
+    },
+    {
+      key: 'categorieEntreprise',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: `
+La catégorie d'entreprise est une variable statistique et calculée par l'Insee. Ce n'est pas une variable du répertoire Sirene.
+
+Définition de la catégorie d'entreprise : https://www.insee.fr/fr/metadonnees/definition/c1057
+      
+Méthodologie de calcul et diffusion de la catégorie d'entreprise : https://www.insee.fr/fr/information/1730869
+      
+https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
+      title: "Catégorie à laquelle appartient l'entreprise",
+      'x-labels': {
+        PME: 'petite ou moyenne entreprise',
+        ETI: 'entreprise de taille intermédiaire',
+        GE: 'grande entreprise'
+      }
+    },
+
+    {
+      key: 'anneeCategorieEntreprise',
+      type: 'integer',
+      description: "Cette variable désigne l'année de validité correspondant à la catégorie d'entreprise diffusée.\n\nhttps://www.sirene.fr/sirene/public/variable/anneeCategorieEntreprise",
+      title: "Année de validité de la catégorie d'entreprise",
+      'x-capabilities': {
+        textStandard: false
+      }
+    },
+
     {
       key: 'complementAdresseEtablissement',
       type: 'string',
@@ -620,7 +1138,11 @@ module.exports = {
         textStandard: false
       },
       description: "Lors de son inscription au répertoire, un établissement est, sauf exception, à l'état « Actif ». Le passage à l'état « Fermé » découle de la prise en compte d'une déclaration de fermeture.\n\nÀ noter qu'un établissement fermé peut être rouvert.\n\nEn règle générale, la première période d'historique d'un établissement correspond à un etatAdministratifUniteLegale égal à « Actif ». Toutefois, l'état administratif peut être à null (première date de début de l'état postérieure à la première date de début d'une autre variable historisée).\n\nhttps://www.sirene.fr/sirene/public/variable/etatAdministratifEtablissement",
-      title: "État administratif de l'établissement"
+      title: "État administratif de l'établissement",
+      'x-labels': {
+        A: 'Actif',
+        F: 'Fermé'
+      }
     },
     {
       key: 'enseigne1Etablissement',
