@@ -38,7 +38,8 @@ describe('Sirene processing', () => {
         // datasetMode: 'update',
         // dataset: { id: 'sirene-etablissements-test-3', title: 'Sirene établissements test' },
         stockUrl: 'http://localhost:8097/stock.zip',
-        apiSireneAccessToken: config.apiSireneAccessToken
+        apiSireneAccessToken: config.apiSireneAccessToken,
+        apiSireneFilter: 'codeCommuneEtablissement:56260'
       },
       tmpDir: './data/test'
     }, config, false)

@@ -48,11 +48,16 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
   const bulkSize = 1000 // max is 1000
   log.info(`interroge l'API Sirene, création d'un curseur long avec lots de ${bulkSize} lignes`)
   let curseurSuivant = '*'
+  let nbDone = 0
+  await log.task('transfer des établissements')
+  const filters = []
+  if (processingConfig.apiSireneFilter) filters.push(processingConfig.apiSireneFilter)
+  if (start) filters.push(`dateDernierTraitementEtablissement:[${start} TO *]`)
   const iterate = async () => {
     const sireneApiRes = await axios.get('https://api.insee.fr/entreprises/sirene/V3/siret', {
       params: {
         tri: 'dateDernierTraitementEtablissement',
-        q: start ? `dateDernierTraitementEtablissement:[${start} TO *]` : '',
+        q: filters.length === 1 ? filters[0] : filters.map(f => `(${f})`).join(' AND '),
         nombre: bulkSize,
         curseur: curseurSuivant
       },
@@ -72,6 +77,9 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
     if (bulkRes.nbErrors) {
       await log.error(`l'envoi des lignes vers data-fair a rencontré des erreurs ${bulkRes.nbErrors} / ${etabs.length}`, bulkRes.errors[0])
     }
+    nbDone += etabs.length
+    // console.log('progress', nbDone, sireneApiRes.data.header)
+    await log.progress('transfer des établissements', nbDone, sireneApiRes.data.header.total)
     if (sireneApiRes.data.header.curseurSuivant === sireneApiRes.data.header.curseur) {
       log.info('fin du curseur')
       return false
