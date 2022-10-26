@@ -49,7 +49,7 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
   log.info(`interroge l'API Sirene, création d'un curseur long avec lots de ${bulkSize} lignes`)
   let curseurSuivant = '*'
   let nbDone = 0
-  await log.task('transfer des établissements')
+  await log.task('transfert des établissements vers le jeu de données')
   const filters = []
   if (processingConfig.apiSireneFilter) filters.push(processingConfig.apiSireneFilter)
   if (start) filters.push(`dateDernierTraitementEtablissement:[${start} TO *]`)
