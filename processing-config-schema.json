@@ -14,7 +14,7 @@
           "required": ["title"],
           "properties": {
             "id": {"type": "string", "title": "Identifiant (laissez vide pour calculer un identifiant à partir du titre)"},
-            "title": {"type": "string", "title": "Titre", "default": "Sirene"}
+            "title": {"type": "string", "title": "Titre", "default": "Sirene établissements"}
           }
         }
       }
@@ -40,12 +40,12 @@
     "title": "Paramètres",
     "properties": {
       "apiSireneAccessToken": {
-        "type": "String",
+        "type": "string",
         "title": "Jeton d'accès à l'API Sirene de l'Insee",
         "x-display": "password"
       },
       "apiSireneFilter": {
-        "type": "String",
+        "type": "string",
         "title": "Filtre à appliquer sur l'API Sirene de l'Insee",
         "description": "Laissez vide pour récupérer tous les établissements.\n\nExemple de filtre sur une commune: \"codeCommuneEtablissement:56260\"\n\ncf https://www.sirene.fr/static-resources/doc/INSEE_Documentation-Extrait_q.pdf"
       }
