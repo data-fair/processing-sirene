@@ -71,6 +71,14 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
       Object.assign(etab, etab.uniteLegale)
       Object.assign(etab, etab.adresseEtablissement)
       Object.assign(etab, etab.adresse2Etablissement)
+      const periode = etab.periodesEtablissement.find(p => p.dateFin === null)
+      if (periode) Object.assign(etab, periode)
+      if (etab.nomenclatureActivitePrincipaleUniteLegale) {
+        etab['activitePrincipaleUniteLegale' + etab.nomenclatureActivitePrincipaleUniteLegale] = etab.activitePrincipaleUniteLegale
+      }
+      if (etab.nomenclatureActivitePrincipaleEtablissement) {
+        etab['activitePrincipaleEtablissement' + etab.nomenclatureActivitePrincipaleEtablissement] = etab.activitePrincipaleEtablissement
+      }
     })
     const csv = csvStringify(etabs, { columns: acceptedKeys, header: true })
     const bulkRes = (await axios.post(`api/v1/datasets/${processingConfig.dataset.id}/_bulk_lines`, zlib.gzipSync(csv), { headers: { 'content-type': 'text/csv+gzip' } })).data
