@@ -478,8 +478,7 @@ https://www.sirene.fr/sirene/public/variable/activitePrincipaleUniteLegale`,
       },
       description: 'Contient le même code que le champ activitePrincipaleUniteLegale mais uniquement si la nomenclature est NAFRev2.',
       title: "Activité principale de l'unité légale (NAFRev2)",
-      'x-group': "Informations sur l'unité légale",
-      'x-refersTo': 'http://www.datatourisme.fr/ontology/core/1.0#apeNaf'
+      'x-group': "Informations sur l'unité légale"
     },
     {
       key: 'activitePrincipaleUniteLegaleNAFRev1',

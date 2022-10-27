@@ -40,8 +40,8 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
   const lastLine = (await axios.get(`/api/v1/datasets/${dataset.id}/lines`, { params: { sort: '-dateDernierTraitementEtablissement', size: 1 } }))
     .data.results[0]
   const start = lastLine && lastLine.dateDernierTraitementEtablissement.split('+')[0]
-  if (start) log.info('date du dernier traitement', start)
-  else log.info('pas de date du dernier traitement, toutes les données seront parcourues')
+  if (start) await log.info('date du dernier traitement', start)
+  else await log.info('pas de date du dernier traitement, toutes les données seront parcourues')
 
   // cf https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3&provider=insee#!/Etablissement/findSiretByQ
   await log.step('Interrogation de l\'API Sirene')
