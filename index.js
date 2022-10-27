@@ -36,7 +36,7 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
     await log.info(`le jeu de donnée existe, id="${dataset.id}", title="${dataset.title}"`)
   }
 
-  await log.step('Récupération des modifications de la dernière date de traitement')
+  await log.step('Récupération de la dernière date de traitement')
   const lastLine = (await axios.get(`/api/v1/datasets/${dataset.id}/lines`, { params: { sort: '-dateDernierTraitementEtablissement', size: 1 } }))
     .data.results[0]
   const start = lastLine && lastLine.dateDernierTraitementEtablissement.split('+')[0]
