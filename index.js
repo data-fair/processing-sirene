@@ -40,24 +40,25 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
   const lastLine = (await axios.get(`/api/v1/datasets/${dataset.id}/lines`, { params: { sort: '-dateDernierTraitementEtablissement', size: 1 } }))
     .data.results[0]
   const start = lastLine && lastLine.dateDernierTraitementEtablissement.split('+')[0]
-  if (start) await log.info('date du dernier traitement', start)
+  if (start) await log.info(`date du dernier traitement : ${start}`)
   else await log.info('pas de date du dernier traitement, toutes les données seront parcourues')
 
   // cf https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3&provider=insee#!/Etablissement/findSiretByQ
   await log.step('Interrogation de l\'API Sirene')
   const bulkSize = 1000 // max is 1000
-  await log.info(`création d'un curseur long avec lots de ${bulkSize} lignes`)
-  let curseurSuivant = '*'
-  let nbDone = 0
-  await log.task('transfert des établissements vers le jeu de données')
   const filters = []
   if (processingConfig.apiSireneFilter) filters.push(processingConfig.apiSireneFilter)
   if (start) filters.push(`dateDernierTraitementEtablissement:[${start} TO *]`)
+  const q = filters.length === 1 ? filters[0] : filters.map(f => `(${f})`).join(' AND ')
+  await log.info(`création d'un curseur long avec lots de ${bulkSize} lignes, filtre q=${q}`)
+  let curseurSuivant = '*'
+  let nbDone = 0
+  await log.task('transfert des établissements vers le jeu de données')
   const iterate = async () => {
     const sireneApiRes = await axios.get('https://api.insee.fr/entreprises/sirene/V3/siret', {
       params: {
         tri: 'dateDernierTraitementEtablissement',
-        q: filters.length === 1 ? filters[0] : filters.map(f => `(${f})`).join(' AND '),
+        q,
         nombre: bulkSize,
         curseur: curseurSuivant
       },
