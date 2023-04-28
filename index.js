@@ -12,7 +12,7 @@ let _stopped
 // processingConfig: an object matching the schema in processing-config-schema.json
 // processingId: the id of the processing configuration in @data-fair/processings
 // dir: a persistent directory associated to the processing configuration
-// tmpDir: a temporary directory that will automatically destroyed after running
+// tmpDir: a temporary directory that will be automatically destroyed after running
 // axios: an axios instance configured so that its base url is a data-fair instance and it sends proper credentials
 // log: contains async debug/info/warning/error methods to store a log on the processing run
 // patchConfig: async method accepting an object to be merged with the configuration
@@ -55,13 +55,16 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
   let nbDone = 0
   await log.task('transfert des établissements vers le jeu de données')
   const iterate = async () => {
-    const sireneApiRes = await axios.get('https://api.insee.fr/entreprises/sirene/V3/siret', {
-      params: {
-        tri: 'dateDernierTraitementEtablissement',
-        q,
-        nombre: bulkSize,
-        curseur: curseurSuivant
-      },
+    const url = new URL('https://api.insee.fr/entreprises/sirene/V3/siret')
+    // WARNING do not use axios "params" the tomcat server does not accept brackets and axios does not escape them
+    url.search = new URLSearchParams({
+      tri: 'dateDernierTraitementEtablissement',
+      q,
+      nombre: bulkSize,
+      curseur: curseurSuivant
+    }).toString()
+    await log.debug(`API request ${url.href}`)
+    const sireneApiRes = await axios.get(url.href, {
       headers: {
         Authorization: 'Bearer ' + processingConfig.apiSireneAccessToken
       }
