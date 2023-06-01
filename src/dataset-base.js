@@ -932,7 +932,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
       'x-capabilities': {
         textStandard: false
       },
-      'x-group': "Adresse de l'établissement"
+      'x-group': "Adresse de l'établissement",
+      'x-refersTo': 'http://rdf.insee.fr/def/geo#codeCommune'
     },
     {
       key: 'codeCedexEtablissement',
