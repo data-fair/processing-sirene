@@ -4,6 +4,19 @@ module.exports = {
   primaryKey: [
     'siret'
   ],
+  extensions: [
+    {
+      active: true,
+      remoteService: 'dataset:geolocalisation-des-etablissements-du-repertoire-sirene',
+      action: 'masterData_bulkSearch_siret-coords',
+      select: [
+        'y_latitude',
+        'x_longitude',
+        'qualite_xy'
+      ],
+      propertyPrefix: '_siret_coords'
+    }
+  ],
   schema: [
     {
       key: 'siren',
