@@ -15,6 +15,22 @@ module.exports = {
         'qualite_xy'
       ],
       propertyPrefix: '_siret_coords'
+    },
+    {
+      active: true,
+      remoteService: 'dataset:communes-de-france',
+      action: 'masterData_bulkSearch_infos-commune',
+      select: [
+        'code_epci',
+        'nom_epci',
+        'code_arrondissement',
+        'nom_arrondissement',
+        'code_departement',
+        'nom_departement',
+        'code_region',
+        'nom_region'
+      ],
+      propertyPrefix: '_infos_commune'
     }
   ],
   schema: [
@@ -975,6 +991,7 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
       description: "Cette variable désigne le code de la commune de localisation de l'établissement, hors adresse à l'étranger.\n\nLe code commune correspond au code commune existant à la date de la mise à disposition : toute modification du code officiel géographique est répercutée sur la totalité des établissements (même ceux fermés) correspondant à ce code commune.\n\nPour les établissements localisés à l'étranger, la variable codeCommuneEtablissement est à null.\n\nhttps://www.sirene.fr/sirene/public/variable/codeCommuneEtablissement",
       title: "Code commune de l'établissement",
       'x-capabilities': {
+        textAgg: false,
         textStandard: false
       },
       'x-group': "Adresse de l'établissement",
