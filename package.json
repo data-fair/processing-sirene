@@ -1,6 +1,6 @@
 {
   "name": "@data-fair/processing-sirene",
-  "version": "0.5.0-beta.2",
+  "version": "0.5.0-beta.3",
   "description": "Load french Sirene database into a data-fair dataset.",
   "main": "index.js",
   "scripts": {
