@@ -251,7 +251,39 @@ https://www.sirene.fr/sirene/public/variable/categorieJuridiqueUniteLegale`,
       title: "Catégorie juridique de l'unité légale",
       'x-group': "Informations sur l'unité légale"
     },
-
+    {
+      key: 'categorieJuridiqueUniteLegaleLibelle',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        textStandard: false
+      },
+      description: 'Contient libellé correspondant à categorieJuridiqueUniteLegale dans le niveau 3 de la nomenclature INSEE des catégories juridiques.',
+      title: "Libellé de la catégorie juridique de l'unité légale",
+      'x-group': "Informations sur l'unité légale"
+    },
+    {
+      key: 'categorieJuridiqueUniteLegaleLibelleNiv1',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        textStandard: false
+      },
+      description: 'Contient libellé correspondant à categorieJuridiqueUniteLegale dans le niveau 1 de la nomenclature INSEE des catégories juridiques.',
+      title: "Libellé de la catégorie juridique de l'unité légale (niveau 1)",
+      'x-group': "Informations sur l'unité légale"
+    },
+    {
+      key: 'categorieJuridiqueUniteLegaleLibelleNiv2',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        textStandard: false
+      },
+      description: 'Contient libellé correspondant à categorieJuridiqueUniteLegale dans le niveau 2 de la nomenclature INSEE des catégories juridiques.',
+      title: "Libellé de la catégorie juridique de l'unité légale (niveau 2)",
+      'x-group': "Informations sur l'unité légale"
+    },
     {
       key: 'denominationUniteLegale',
       type: 'string',
@@ -1324,6 +1356,93 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
       title: "Activité principale de l'établissement (NAFRev2)",
       'x-group': "Informations sur l'établissement",
       'x-refersTo': 'http://www.datatourisme.fr/ontology/core/1.0#apeNaf'
+    },
+    {
+      key: 'activitePrincipaleEtablissementNAFRev2Libelle',
+      type: 'string',
+      description: 'Contient le libellé correspondant à activitePrincipaleEtablissementNAFRev2.',
+      title: "Libellé de l'activité principale de l'établissement (NAFRev2)",
+      'x-group': "Informations sur l'établissement"
+    },
+    {
+      key: 'activitePrincipaleEtablissementNAFRev2Niv4',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: 'Contient le code de niveau 4 de la nomenclature NAFRev2.',
+      title: "Activité principale de l'établissement (NAFRev2 niveau 4)",
+      'x-group': "Informations sur l'établissement"
+    },
+    {
+      key: 'activitePrincipaleEtablissementNAFRev2LibelleNiv4',
+      type: 'string',
+      description: 'Contient le libellé correspondant à activitePrincipaleEtablissementNAFRev2Niv4.',
+      title: "Libellé de l'activité principale de l'établissement (NAFRev2 niveau 4)",
+      'x-group': "Informations sur l'établissement"
+    },
+    {
+      key: 'activitePrincipaleEtablissementNAFRev2Niv3',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: 'Contient le code de niveau 3 de la nomenclature NAFRev2.',
+      title: "Activité principale de l'établissement (NAFRev2 niveau 3)",
+      'x-group': "Informations sur l'établissement"
+    },
+    {
+      key: 'activitePrincipaleEtablissementNAFRev2LibelleNiv3',
+      type: 'string',
+      description: 'Contient le libellé correspondant à activitePrincipaleEtablissementNAFRev2Niv3.',
+      title: "Libellé de l'activité principale de l'établissement (NAFRev2 niveau 3)",
+      'x-group': "Informations sur l'établissement"
+    },
+    {
+      key: 'activitePrincipaleEtablissementNAFRev2Niv2',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: 'Contient le code de niveau 2 de la nomenclature NAFRev2.',
+      title: "Activité principale de l'établissement (NAFRev2 niveau 2)",
+      'x-group': "Informations sur l'établissement"
+    },
+    {
+      key: 'activitePrincipaleEtablissementNAFRev2LibelleNiv2',
+      type: 'string',
+      description: 'Contient le libellé correspondant à activitePrincipaleEtablissementNAFRev2Niv2.',
+      title: "Libellé de l'activité principale de l'établissement (NAFRev2 niveau 2)",
+      'x-group': "Informations sur l'établissement"
+    },
+    {
+      key: 'activitePrincipaleEtablissementNAFRev2Niv1',
+      type: 'string',
+      'x-capabilities': {
+        textAgg: false,
+        insensitive: false,
+        text: false,
+        textStandard: false
+      },
+      description: 'Contient le code de niveau 1 de la nomenclature NAFRev1.',
+      title: "Activité principale de l'établissement (NAFRev2 niveau 1)",
+      'x-group': "Informations sur l'établissement"
+    },
+    {
+      key: 'activitePrincipaleEtablissementNAFRev2LibelleNiv1',
+      type: 'string',
+      description: 'Contient le libellé correspondant à activitePrincipaleEtablissementNAFRev2Niv1.',
+      title: "Libellé de l'activité principale de l'établissement (NAFRev2 niveau 1)",
+      'x-group': "Informations sur l'établissement"
     },
     {
       key: 'activitePrincipaleEtablissementNAFRev1',

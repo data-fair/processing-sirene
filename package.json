@@ -30,6 +30,7 @@
     "standard": "^16.0.3"
   },
   "dependencies": {
+    "csv-parse": "^5.4.0",
     "csv-stringify": "^6.2.0"
   }
 }
