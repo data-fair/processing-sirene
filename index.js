@@ -115,14 +115,14 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
       }
       if (etab.activitePrincipaleEtablissementNAFRev2) {
         if (!naf2008[etab.activitePrincipaleEtablissementNAFRev2]) {
-          await log.error('code inconnu de la nomenclature NAF ref 2', etab.activitePrincipaleEtablissementNAFRev2)
+          await log.error('code inconnu de la nomenclature NAF ref 2 : ' + etab.activitePrincipaleEtablissementNAFRev2)
         } else {
           Object.assign(etab, naf2008[etab.activitePrincipaleEtablissementNAFRev2])
         }
       }
       if (etab.categorieJuridiqueUniteLegale) {
         if (!cjNiv3[etab.categorieJuridiqueUniteLegale]) {
-          await log.error('code inconnu de la nomenclature des catégories juridiques', etab.categorieJuridiqueUniteLegale)
+          await log.error('code inconnu de la nomenclature des catégories juridiques : ' + etab.categorieJuridiqueUniteLegale)
         } else {
           etab.categorieJuridiqueUniteLegaleLibelle = cjNiv3[etab.categorieJuridiqueUniteLegale]
           etab.categorieJuridiqueUniteLegaleLibelleNiv1 = cjNiv1[etab.categorieJuridiqueUniteLegale.slice(0, 1)]
