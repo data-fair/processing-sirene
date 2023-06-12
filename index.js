@@ -1,3 +1,4 @@
+const path = require('path')
 const fs = require('fs')
 const zlib = require('zlib')
 const csvStringify = require('csv-stringify/sync').stringify
@@ -47,16 +48,16 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
 
   await log.step('Chargement de données pour enrichissement des lignes')
   await log.info('catégories juridiques niveau 1')
-  const cjNiv1 = csvParse(fs.readFileSync('./resources/cj/niv1.csv'), { columns: true, skip_empty_lines: true })
+  const cjNiv1 = csvParse(fs.readFileSync(path.join(__dirname, 'resources/cj/niv1.csv')), { columns: true, skip_empty_lines: true })
     .reduce((a, item) => { a[item.Code] = item['Libellé']; return a }, {})
   await log.info('catégories juridiques niveau 2')
-  const cjNiv2 = csvParse(fs.readFileSync('./resources/cj/niv2.csv'), { columns: true, skip_empty_lines: true })
+  const cjNiv2 = csvParse(fs.readFileSync(path.join(__dirname, 'resources/cj/niv2.csv')), { columns: true, skip_empty_lines: true })
     .reduce((a, item) => { a[item.Code] = item['Libellé']; return a }, {})
   await log.info('catégories juridiques niveau 3')
-  const cjNiv3 = csvParse(fs.readFileSync('./resources/cj/niv3.csv'), { columns: true, skip_empty_lines: true })
+  const cjNiv3 = csvParse(fs.readFileSync(path.join(__dirname, 'resources/cj/niv3.csv')), { columns: true, skip_empty_lines: true })
     .reduce((a, item) => { a[item.Code] = item['Libellé']; return a }, {})
   await log.info('NAF 208')
-  const naf2008 = csvParse(fs.readFileSync('./resources/naf2008.csv'), { columns: true, skip_empty_lines: true })
+  const naf2008 = csvParse(fs.readFileSync(path.join(__dirname, 'resources/naf2008.csv')), { columns: true, skip_empty_lines: true })
     .reduce((a, item) => {
       a[item.NIV5] = {
         activitePrincipaleEtablissementNAFRev2Libelle: item['Libelle-NIV5'],
