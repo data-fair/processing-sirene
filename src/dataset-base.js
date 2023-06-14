@@ -84,7 +84,8 @@ module.exports = {
       description: 'Seuls les établissements diffusibles sont accessibles à tout public (statutDiffusionEtablissement=O).\n\nhttps://www.sirene.fr/sirene/public/variable/statutDiffusionEtablissement',
       'x-labels': {
         O: 'Établissement diffusable',
-        N: 'Personne physique ayant demandé à être exclue de la diffusion'
+        N: 'Personne physique ayant demandé à être exclue de la diffusion',
+        P: 'diffusion partielle'
       },
       title: "Statut de diffusion de l'établissement",
       'x-group': "Informations sur l'établissement"
@@ -210,7 +211,8 @@ https://www.sirene.fr/sirene/public/variable/etatAdministratifUniteLegale`,
       description: 'Seules les unités légales diffusibles sont accessibles à tout public (statutDiffusionUniteLegale=O).\n\nhttps://www.sirene.fr/sirene/public/variable/statutDiffusionUniteLegale',
       'x-labels': {
         O: 'unité légale faisant partie de la diffusion publique',
-        N: 'personne physique ayant demandé à être exclue de la diffusion'
+        N: 'personne physique ayant demandé à être exclue de la diffusion',
+        P: 'diffusion partielle'
       },
       title: "Statut de diffusion de l'unité légale",
       'x-group': "Informations sur l'unité légale"
