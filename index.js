@@ -121,12 +121,12 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
         }
       }
       if (etab.categorieJuridiqueUniteLegale) {
-        if (!cjNiv3[etab.categorieJuridiqueUniteLegale]) {
+        if (!cjNiv1[etab.categorieJuridiqueUniteLegale.slice(0, 1)]) {
           await log.error('code inconnu de la nomenclature des catégories juridiques : ' + etab.categorieJuridiqueUniteLegale)
         } else {
-          etab.categorieJuridiqueUniteLegaleLibelle = cjNiv3[etab.categorieJuridiqueUniteLegale]
           etab.categorieJuridiqueUniteLegaleLibelleNiv1 = cjNiv1[etab.categorieJuridiqueUniteLegale.slice(0, 1)]
-          etab.categorieJuridiqueUniteLegaleLibelleNiv2 = cjNiv2[etab.categorieJuridiqueUniteLegale.slice(0, 2)]
+          etab.categorieJuridiqueUniteLegaleLibelleNiv2 = cjNiv2[etab.categorieJuridiqueUniteLegale.slice(0, 2)] || etab.categorieJuridiqueUniteLegaleLibelleNiv1
+          etab.categorieJuridiqueUniteLegaleLibelle = cjNiv3[etab.categorieJuridiqueUniteLegale] || etab.categorieJuridiqueUniteLegaleLibelleNiv2
         }
       }
     }
