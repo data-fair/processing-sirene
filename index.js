@@ -115,7 +115,11 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
       }
       if (etab.activitePrincipaleEtablissementNAFRev2) {
         if (!naf2008[etab.activitePrincipaleEtablissementNAFRev2]) {
-          await log.error('code inconnu de la nomenclature NAF ref 2 : ' + etab.activitePrincipaleEtablissementNAFRev2)
+          if (etab.activitePrincipaleEtablissementNAFRev2 === '00.00Z') {
+            // this is a temporary when waiting for assignment
+          } else {
+            await log.error('code inconnu de la nomenclature NAF ref 2 : ' + etab.activitePrincipaleEtablissementNAFRev2)
+          }
         } else {
           Object.assign(etab, naf2008[etab.activitePrincipaleEtablissementNAFRev2])
         }
