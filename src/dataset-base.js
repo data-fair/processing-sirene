@@ -14,7 +14,8 @@ module.exports = {
         'x_longitude',
         'qualite_xy'
       ],
-      propertyPrefix: '_siret_coords'
+      propertyPrefix: '_siret_coords',
+      type: 'remoteService'
     },
     {
       active: true,
@@ -30,7 +31,8 @@ module.exports = {
         'code_region',
         'nom_region'
       ],
-      propertyPrefix: '_infos_commune'
+      propertyPrefix: '_infos_commune',
+      type: 'remoteService'
     }
   ],
   schema: [
