@@ -75,7 +75,7 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
 
   // cf https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3&provider=insee#!/Etablissement/findSiretByQ
   await log.step('Interrogation de l\'API Sirene')
-  const bulkSize = 1000 // max is 1000
+  const bulkSize = 500 // max is 1000
   const filters = []
   if (processingConfig.apiSireneFilter) filters.push(processingConfig.apiSireneFilter)
   if (start) filters.push(`dateDernierTraitementEtablissement:[${start} TO *]`)
