@@ -85,7 +85,7 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
   let nbDone = 0
   await log.task('transfert des établissements vers le jeu de données')
   const iterate = async () => {
-    const url = new URL('https://api.insee.fr/entreprises/sirene/V3.11/siret')
+    const url = new URL('https://api.insee.fr/api-sirene/3.11/siret')
     // WARNING do not use axios "params" the tomcat server does not accept brackets and axios does not escape them
     url.search = new URLSearchParams({
       tri: 'dateDernierTraitementEtablissement',
@@ -96,7 +96,7 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
     await log.debug(`API request ${url.href}`)
     const sireneApiRes = await axios.get(url.href, {
       headers: {
-        Authorization: 'Bearer ' + processingConfig.apiSireneAccessToken
+        'X-INSEE-Api-Key-Integration': processingConfig.apiSireneAccessToken
       }
     })
     const etabs = sireneApiRes.data.etablissements
