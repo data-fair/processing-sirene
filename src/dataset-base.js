@@ -1375,7 +1375,8 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
       },
       description: "Lors de son inscription au répertoire, l'Insee attribue à tout établissement un code dit « APE » sur la base de la description de l'activité principale faite par le déclarant. Ce code est modifiable au cours de la vie de l'établissement en fonction des déclarations de l'exploitant.\n\nPour chaque établissement, il existe à un instant donné un seul code « APE ». Il est attribué selon la nomenclature en vigueur. La nomenclature en vigueur est la Naf Rév2 et ce depuis le 1er Janvier 2008. Chaque code comporte 2 chiffres, un point, 2 chiffres et une lettre. Tous les établissements actifs au 01/01/2008 ont eu leur code APE recodé dans la nouvelle nomenclature, ainsi de très nombreux établissements ont une période débutant à cette date.\n\nAu moment de la déclaration de l'entreprise, il peut arriver que l'Insee ne soit pas en mesure d'attribuer le bon code APE : la modalité 00.00Z peut alors être affectée provisoirement.\n\nhttps://www.sirene.fr/sirene/public/variable/activitePrincipaleEtablissement",
       title: "Activité principale de l'établissement",
-      'x-group': "Informations sur l'établissement"
+      'x-group': "Informations sur l'établissement",
+      'x-refersTo': 'http://www.datatourisme.fr/ontology/core/1.0#apeNaf'
     },
     {
       key: 'activitePrincipaleEtablissementNAFRev2',
@@ -1388,8 +1389,7 @@ https://www.sirene.fr/sirene/public/variable/categorieEntreprise`,
       },
       description: 'Contient le même code que le champ activitePrincipaleEtablissement mais uniquement si la nomenclature est NAFRev2.',
       title: "Activité principale de l'établissement (NAFRev2)",
-      'x-group': "Informations sur l'établissement",
-      'x-refersTo': 'http://www.datatourisme.fr/ontology/core/1.0#apeNaf'
+      'x-group': "Informations sur l'établissement"
     },
     {
       key: 'activitePrincipaleEtablissementNAFRev2Libelle',
