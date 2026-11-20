@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/data-fair/processing-sirene/issues"
   },
-  "homepage": "https://github.com/data-fair/processings-sirene#readme",
+  "homepage": "https://github.com/data-fair/processing-sirene#readme",
   "devDependencies": {
     "@data-fair/processings-test-utils": "^0.5.2",
     "config": "^3.3.6",
