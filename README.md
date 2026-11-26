@@ -2,35 +2,36 @@
 
 Load french Sirene database into a data-fair dataset.
 
+## Development
+
+```bash
+npm i
+npm run build-types   # regenerate the types after every change of processing-config-schema.json
+npm run lint
+npm test              # data-fair and the Sirene API are simulated
+```
+
 ## Release
 
-Processing plugins are fetched from the npm registry with a filter on keyword "data-fair-processings-plugin". So publishing a plugin is as simple as publishing the npm package:
+Publishing is handled automatically by CI: the plugin is pushed to the data-fair registry (`@data-fair/registry`), not to the public npm registry — there is no manual `npm publish`. A push to `main`/`master` publishes to the staging registry; pushing a `v*` tag publishes to production:
 
-```
-npm version minor
-npm publish
-git push && git push --tags
+```bash
+npm version minor       # version bump + v* tag
+git push --follow-tags  # CI publishes to the production registry
 ```
 
-To publish a test version, use prerelease versioning with a "test" npm tag:
-
-```
-npm version preminor --preid=beta
-npm publish --tag=test
-git push && git push --tags
-```
 ## Catch-up of a window
 
 Each run restarts from the most recent `dateDernierTraitementEtablissement` already loaded. When the
 INSEE publishes establishments late with an older date, they are skipped. It happened between
 2025-12-05T13:05 and 2025-12-08, during an INSEE mass update (13.8 million establishments, almost all
-of them already in the dataset with an older version, a few hundred missing). `scripts/catch-up.js`
+of them already in the dataset with an older version, a few hundred missing). `scripts/catch-up.ts`
 reads such a window again by hand (local INSEE times, without offset) and sends only the
 establishments missing from the dataset:
 
 ```
-INSEE_API_KEY=... FROM=2025-12-05T13:00:00 TO=2025-12-08T00:00:00 node scripts/catch-up.js --dry-run
-INSEE_API_KEY=... DATA_FAIR_API_KEY=... FROM=2025-12-05T13:00:00 TO=2025-12-08T00:00:00 node scripts/catch-up.js
+INSEE_API_KEY=... FROM=2025-12-05T13:00:00 TO=2025-12-08T00:00:00 node scripts/catch-up.ts --dry-run
+INSEE_API_KEY=... DATA_FAIR_API_KEY=... FROM=2025-12-05T13:00:00 TO=2025-12-08T00:00:00 node scripts/catch-up.ts
 ```
 
 `--dry-run` sends nothing and counts the establishments that would be sent. The script stops before

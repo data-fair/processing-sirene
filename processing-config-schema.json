@@ -1,52 +1,74 @@
 {
   "type": "object",
-  "x-display": "tabs",
+  "layout": "tabs",
   "required": ["datasetMode", "apiSireneAccessToken"],
   "allOf": [{
-    "title": "Jeu de données",
+    "title": "Dataset",
+    "x-i18n-title": { "fr": "Jeu de données" },
     "oneOf": [{
-      "title": "Créer un jeu de données",
-      "required": ["dataset"],
+      "title": "Create a dataset",
+      "x-i18n-title": { "fr": "Créer un jeu de données" },
+      "required": ["datasetTitle"],
       "properties": {
         "datasetMode": { "type": "string", "const": "create", "title": "Action" },
-        "dataset": {
-          "type": "object",
-          "required": ["title"],
-          "properties": {
-            "title": {"type": "string", "title": "Titre", "default": "Sirene établissements"}
-          }
+        "datasetTitle": {
+          "type": "string",
+          "title": "Title of the dataset to create",
+          "x-i18n-title": { "fr": "Titre du jeu de données à créer" },
+          "description": "The dataset is created on the first run, the following runs update it.",
+          "x-i18n-description": { "fr": "Le jeu de données est créé à la première exécution, les exécutions suivantes le mettent à jour." },
+          "default": "Sirene établissements"
         }
       }
     }, {
-      "title": "Mettre à jour un jeu de données",
+      "title": "Update a dataset",
+      "x-i18n-title": { "fr": "Mettre à jour un jeu de données" },
       "required": ["dataset"],
       "properties": {
-        "datasetMode": { "type": "string", "const": "update" },
+        "datasetMode": { "type": "string", "const": "update", "title": "Action" },
         "dataset": {
           "type": "object",
-          "x-fromUrl": "{context.dataFairUrl}/api/v1/datasets?q={q}&select=id,title&{context.ownerFilter}",
-          "x-itemsProp": "results",
-          "x-itemTitle": "title",
-          "x-itemKey": "id",
+          "title": "Dataset",
+          "x-i18n-title": { "fr": "Jeu de données" },
+          "layout": {
+            "getItems": {
+              "url": "${context.dataFairUrl}/api/v1/datasets?select=id,title&size=50&${context.ownerFilter}&raw=true",
+              "qSearchParam": "q",
+              "itemsResults": "data.results",
+              "itemTitle": "item.title",
+              "itemKey": "item.id"
+            }
+          },
           "properties": {
-            "id": {"type": "string", "title": "Identifiant"},
-            "title": {"type": "string", "title": "Titre"}
+            "id": { "type": "string", "title": "Identifier", "x-i18n-title": { "fr": "Identifiant" } },
+            "title": { "type": "string", "title": "Title", "x-i18n-title": { "fr": "Titre" } }
           }
         }
       }
     }]
   }, {
-    "title": "Paramètres",
+    "title": "Parameters",
+    "x-i18n-title": { "fr": "Paramètres" },
     "properties": {
       "apiSireneAccessToken": {
         "type": "string",
-        "title": "Jeton d'accès à l'API Sirene de l'Insee",
-        "x-display": "password"
+        "title": "API key of the INSEE Sirene API",
+        "x-i18n-title": { "fr": "Clé d'API de l'API Sirene de l'Insee" },
+        "description": "Stored encrypted, never shown again once saved.",
+        "x-i18n-description": { "fr": "Stockée chiffrée, elle n'est plus affichée une fois enregistrée." },
+        "layout": {
+          "props": {
+            "type": "password",
+            "autocomplete": "suppress"
+          }
+        }
       },
       "apiSireneFilter": {
         "type": "string",
-        "title": "Filtre à appliquer sur l'API Sirene de l'Insee",
-        "description": "Laissez vide pour récupérer tous les établissements.\n\nExemple de filtre sur une commune: \"codeCommuneEtablissement:56260\""
+        "title": "Filter applied to the INSEE Sirene API",
+        "x-i18n-title": { "fr": "Filtre à appliquer sur l'API Sirene de l'Insee" },
+        "description": "Leave empty to get every establishment.\n\nExample of a filter on a city: \"codeCommuneEtablissement:56260\"",
+        "x-i18n-description": { "fr": "Laissez vide pour récupérer tous les établissements.\n\nExemple de filtre sur une commune : \"codeCommuneEtablissement:56260\"" }
       }
     }
   }]

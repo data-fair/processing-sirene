@@ -1,5 +1,7 @@
-const assert = require('assert').strict
-const { newOrChanged, loadReferences, prepareEtablissement } = require('../src/etablissements')
+import { strict as assert } from 'node:assert'
+import { describe, it } from 'node:test'
+import zlib from 'node:zlib'
+import { newOrChanged, loadReferences, prepareEtablissement, toBulkBody, logBulkErrors, type Etablissement } from '../lib/etablissements.ts'
 
 describe('etablissements utils', () => {
   it('should keep only the missing or changed establishments', () => {
@@ -13,17 +15,32 @@ describe('etablissements utils', () => {
   })
 
   it('should flatten and enrich an establishment', async () => {
-    const etab = {
+    const etab: Etablissement = {
       siret: '39940438300057',
       uniteLegale: { categorieJuridiqueUniteLegale: '1000' },
       adresseEtablissement: { codePostalEtablissement: '24390' },
       periodesEtablissement: [{ dateFin: null, etatAdministratifEtablissement: 'A', activitePrincipaleEtablissement: '43.31Z', nomenclatureActivitePrincipaleEtablissement: 'NAFRev2' }]
     }
-    await prepareEtablissement(etab, loadReferences(), { error: async (msg) => { throw new Error(msg) } })
+    await prepareEtablissement(etab, loadReferences(), { error: async (msg: string) => { throw new Error(msg) } })
     assert.equal(etab.codePostalEtablissement, '24390')
     assert.equal(etab.etatAdministratifEtablissement, 'A')
     assert.equal(etab.activitePrincipaleEtablissementNAFRev2, '43.31Z')
     assert.ok(etab.activitePrincipaleEtablissementNAFRev2Libelle)
     assert.ok(etab.categorieJuridiqueUniteLegaleLibelle)
+  })
+
+  it('should build a gzipped CSV body restricted to the dataset columns', () => {
+    const csv = zlib.gunzipSync(toBulkBody([{ siret: '1', siren: '2', unknownColumn: 'x' }])).toString()
+    const [header, line] = csv.trim().split('\n')
+    assert.ok(header.startsWith('siren,'))
+    assert.ok(!header.includes('unknownColumn'))
+    assert.ok(line.includes('1') && line.includes('2'))
+  })
+
+  it('should log every rejected line', async () => {
+    const messages: string[] = []
+    await logBulkErrors({ nbErrors: 2, errors: [{ line: 0, error: 'a' }, { line: 1, error: 'b' }] }, [{ siret: 's0' }, { siret: 's1' }], { error: async (msg: string) => { messages.push(msg) } })
+    assert.equal(messages.length, 3)
+    assert.ok(messages[1].includes('s0') && messages[2].includes('s1'))
   })
 })
