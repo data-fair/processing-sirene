@@ -1,11 +1,5 @@
-const path = require('path')
-const fs = require('fs')
-const zlib = require('zlib')
-const csvStringify = require('csv-stringify/sync').stringify
-const csvParse = require('csv-parse/sync').parse
 const datasetBase = require('./src/dataset-base')
-const acceptedKeys = datasetBase.schema.map(s => s.key)
-// console.log('acceptedKeys', acceptedKeys)
+const { loadReferences, prepareEtablissement, toBulkBody, logBulkErrors } = require('./src/etablissements')
 
 // a global variable to manage interruption
 let _stopped
@@ -47,31 +41,7 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
   else await log.info('pas de date du dernier traitement, toutes les données seront parcourues')
 
   await log.step('Chargement de données pour enrichissement des lignes')
-  await log.info('catégories juridiques niveau 1')
-  const cjNiv1 = csvParse(fs.readFileSync(path.join(__dirname, 'resources/cj/niv1.csv')), { columns: true, skip_empty_lines: true })
-    .reduce((a, item) => { a[item.Code] = item['Libellé']; return a }, {})
-  await log.info('catégories juridiques niveau 2')
-  const cjNiv2 = csvParse(fs.readFileSync(path.join(__dirname, 'resources/cj/niv2.csv')), { columns: true, skip_empty_lines: true })
-    .reduce((a, item) => { a[item.Code] = item['Libellé']; return a }, {})
-  await log.info('catégories juridiques niveau 3')
-  const cjNiv3 = csvParse(fs.readFileSync(path.join(__dirname, 'resources/cj/niv3.csv')), { columns: true, skip_empty_lines: true })
-    .reduce((a, item) => { a[item.Code] = item['Libellé']; return a }, {})
-  await log.info('NAF 208')
-  const naf2008 = csvParse(fs.readFileSync(path.join(__dirname, 'resources/naf2008.csv')), { columns: true, skip_empty_lines: true })
-    .reduce((a, item) => {
-      a[item.NIV5] = {
-        activitePrincipaleEtablissementNAFRev2Libelle: item['Libelle-NIV5'],
-        activitePrincipaleEtablissementNAFRev2Niv4: item.NIV4,
-        activitePrincipaleEtablissementNAFRev2LibelleNiv4: item['Libelle-NIV4'],
-        activitePrincipaleEtablissementNAFRev2Niv3: item.NIV3,
-        activitePrincipaleEtablissementNAFRev2LibelleNiv3: item['Libelle-NIV3'],
-        activitePrincipaleEtablissementNAFRev2Niv2: item.NIV2,
-        activitePrincipaleEtablissementNAFRev2LibelleNiv2: item['Libelle-NIV2'],
-        activitePrincipaleEtablissementNAFRev2Niv1: item.NIV1,
-        activitePrincipaleEtablissementNAFRev2LibelleNiv1: item['Libelle-NIV1']
-      }
-      return a
-    }, {})
+  const refs = loadReferences()
 
   // cf https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3&provider=insee#!/Etablissement/findSiretByQ
   await log.step('Interrogation de l\'API Sirene')
@@ -100,45 +70,9 @@ exports.run = async ({ pluginConfig, processingConfig, processingId, dir, tmpDir
       }
     })
     const etabs = sireneApiRes.data.etablissements
-    for (const etab of etabs) {
-      // flatten some properties
-      Object.assign(etab, etab.uniteLegale)
-      Object.assign(etab, etab.adresseEtablissement)
-      Object.assign(etab, etab.adresse2Etablissement)
-      const periode = etab.periodesEtablissement.find(p => p.dateFin === null)
-      if (periode) Object.assign(etab, periode)
-      if (etab.nomenclatureActivitePrincipaleUniteLegale) {
-        etab['activitePrincipaleUniteLegale' + etab.nomenclatureActivitePrincipaleUniteLegale] = etab.activitePrincipaleUniteLegale
-      }
-      if (etab.nomenclatureActivitePrincipaleEtablissement) {
-        etab['activitePrincipaleEtablissement' + etab.nomenclatureActivitePrincipaleEtablissement] = etab.activitePrincipaleEtablissement
-      }
-      if (etab.activitePrincipaleEtablissementNAFRev2) {
-        if (!naf2008[etab.activitePrincipaleEtablissementNAFRev2]) {
-          if (etab.activitePrincipaleEtablissementNAFRev2 === '00.00Z') {
-            // this is a temporary when waiting for assignment
-          } else {
-            await log.error('code inconnu de la nomenclature NAF ref 2 : ' + etab.activitePrincipaleEtablissementNAFRev2)
-          }
-        } else {
-          Object.assign(etab, naf2008[etab.activitePrincipaleEtablissementNAFRev2])
-        }
-      }
-      if (etab.categorieJuridiqueUniteLegale) {
-        if (!cjNiv1[etab.categorieJuridiqueUniteLegale.slice(0, 1)]) {
-          await log.error('code inconnu de la nomenclature des catégories juridiques : ' + etab.categorieJuridiqueUniteLegale)
-        } else {
-          etab.categorieJuridiqueUniteLegaleLibelleNiv1 = cjNiv1[etab.categorieJuridiqueUniteLegale.slice(0, 1)]
-          etab.categorieJuridiqueUniteLegaleLibelleNiv2 = cjNiv2[etab.categorieJuridiqueUniteLegale.slice(0, 2)] || etab.categorieJuridiqueUniteLegaleLibelleNiv1
-          etab.categorieJuridiqueUniteLegaleLibelle = cjNiv3[etab.categorieJuridiqueUniteLegale] || etab.categorieJuridiqueUniteLegaleLibelleNiv2
-        }
-      }
-    }
-    const csv = csvStringify(etabs, { columns: acceptedKeys, header: true })
-    const bulkRes = (await axios.post(`api/v1/datasets/${processingConfig.dataset.id}/_bulk_lines`, zlib.gzipSync(csv), { headers: { 'content-type': 'text/csv+gzip' } })).data
-    if (bulkRes.nbErrors) {
-      await log.error(`l'envoi des lignes vers data-fair a rencontré des erreurs ${bulkRes.nbErrors} / ${etabs.length}`, bulkRes.errors[0])
-    }
+    for (const etab of etabs) await prepareEtablissement(etab, refs, log)
+    const bulkRes = (await axios.post(`api/v1/datasets/${processingConfig.dataset.id}/_bulk_lines`, toBulkBody(etabs), { headers: { 'content-type': 'text/csv+gzip' } })).data
+    await logBulkErrors(bulkRes, etabs, log)
     nbDone += etabs.length
     // console.log('progress', nbDone, sireneApiRes.data.header)
     await log.progress('transfert des établissements vers le jeu de données', nbDone, sireneApiRes.data.header.total)
