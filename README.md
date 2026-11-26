@@ -38,3 +38,6 @@ sending more than `MAX_SEND` establishments (default 5000). `FILTER` adds a Sire
 `--include-changed` also sends the establishments present with another date (beware: data-fair extends
 and indexes every line of a bulk, about 23 s per 1000 lines). `DATA_FAIR_URL` (default
 `https://opendata.koumoul.com/data-fair`) and `DATASET_ID` (default `sirene`) can be overridden.
+
+A list of sirets (for instance found in the INSEE stock files) can be read instead of a window:
+`SIRETS_FILE=sirets.txt` (one siret per line) replaces `FROM` and `TO`.
